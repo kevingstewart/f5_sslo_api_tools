@@ -1,4 +1,5 @@
 .Trash*
 .DS_Store
+terraform-aws-sslo/*.pem
 /terraform-aws-sslo/*.pem
 ./terraform-aws-sslo/*.pem
