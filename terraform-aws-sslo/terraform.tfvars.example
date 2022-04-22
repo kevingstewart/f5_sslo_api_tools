@@ -13,8 +13,8 @@ prefix = "jc"
 ec2_key_name = "sslo-keypair"
 
 # AWS location
-region = "us-west-2"
-az     = "us-west-2a"
+region = "us-east-1"
+az     = "us-east-1a"
 
 # AMI IDs (Region-specific)
 sslo_ami       = "ami-06ceb79f3482bd83c" ### us-east-1 ### F5 BIG-IP VE - ALL (BYOL, 2 Boot Locations) ### 15.1.1 (SSLO 7.5)
@@ -26,10 +26,11 @@ webapp_ami     = "ami-05343502b4149e010" ### us-east-1 ### WordPress with NGINX 
 instance_type = "m5.4xlarge"
 
 # BYOL License Key required for SSL Orchestrator
-license_key = "JQUPN-XDRZR-PCYFF-DNNUM-HEMCKEJ"
+license_key = "AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE"
 
 # Source list for management security group
-mgmt_src_addr_prefixes = ["99.244.215.84/32"]
+# !!! Add your own source IP and bitmask here to restrict access!!!
+mgmt_src_addr_prefixes = ["0.0.0.0/0"]
 
 # 'admin' user password for BIG-IP
 admin_password = "f5Twister!"
