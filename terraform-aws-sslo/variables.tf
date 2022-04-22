@@ -4,6 +4,7 @@ variable "prefix" {
   description = "Prefix for object creation"
   type        = string
   default     = "demo"
+}
 
 variable "region" {
   description = "AWS Region"
