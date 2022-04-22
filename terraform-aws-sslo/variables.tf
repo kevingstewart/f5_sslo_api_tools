@@ -1,66 +1,74 @@
-## Add a prefix to objects in SSLO - this will make identifying your config easier
+# Terraform Variables
+
 variable "prefix" {
-  description = "Type a prefix name to keep your SSLO objects unique"
-  type        = string 
-  default     = "kstew_sslo4_"
-}
-
-
-## Replace this with your SSH Keypair name 
-## You should have created a key pair in advance, if not go create one!
-variable "ec2_key_name" {
-  description = "AWS EC2 Key name for SSH access"
+  description = "Prefix for object creation"
   type        = string
-  default     = "kstewart_keypair"
-}
+  default     = "demo"
 
-
-## Region - Change Your Region Here
 variable "region" {
-  description = "Set the Region"
+  description = "AWS Region"
   type        = string
   default     = "us-east-1"
 }
 
-
-## Availability Zone - Set Your AZ
 variable "az" {
-  description = "Set Availability Zone"
+  description = "AWS Availability Zone"
   type        = string
   default     = "us-east-1a"
 }
 
+variable "ec2_key_name" {
+  description = "AWS EC2 Key name for SSH access"
+  type        = string
+}
 
-## Jump Box AMI - Change AMI to whatever, the world is your oyster!
+variable "license_key" {
+  description = "SSL Orchestrator license key (BYOL)"
+  type        = string
+}
+
+variable "admin_password" {
+  description = "Password for the BIG-IP GUI/API"
+  type        = string
+  default     = "PleaseChangeM3!"
+}
+
+variable "mgmt_src_addr_prefixes" {
+  description = "Allowed source IP prefixes for management access"
+  type        = list(string)
+}
+
+variable "vpc_cidrs" {
+  description = "VPC subnets (CIDR)"
+  type        = map(string)
+}
+
+variable "instance_type" {
+  description = "BIG-IP VM instance type - *.4xlarge supports up to 8 ENIs"
+  type        = string
+  default     = "m5.4xlarge"
+}
+
 variable "jumpbox_ami" {
-  description = "Windows Server 2019 Base"
+  description = "Jumphost AMI - Default: Windows Server 2019 Base (us-east-1)"
   type        = string
   default     = "ami-0aad84f764a2bd39a"
 }
 
-
-## BIG-IP AMI - Change AMI to whatever, the world is your oyster!
 variable "sslo_ami" {
-  description = "BIG-IP version 15.1.1"
+  description = "BIG-IP AMI - Default 16.1.0 (us-east-1)"
   type        = string
-  default     = "ami-06ceb79f3482bd83c"
+  default     = "ami-08d7cf776e3a0e6fb"
 }
 
-
-## Inspection AMI - Change AMI to whatever, the world is your oyster!
 variable "inspection_ami" {
-  description = "Snort Network Intrusion and Detection System"
+  description = "Inspection AMI - Default: Snort NIDS (us-east-1)"
   type        = string
   default     = "ami-0cdc9ccb73322825f"
 }
 
-
-## Webapp Test AMI - Change AMI to whatever, the world is your oyster!
 variable "webapp_ami" {
-  description = "Test webb app"
+  description = "Test web app AMI - Default: Wordpress"
   type        = string
   default     = "ami-05343502b4149e010"
 }
-
-
-

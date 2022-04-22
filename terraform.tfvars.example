@@ -1,0 +1,48 @@
+################################################################################
+###                             EXAMPLE TFVARS FILE                          ### ################################################################################
+### Copy this file to 'terraform.tfvars' and modify as required              ###
+### The new terraform.tfvars file will be ignored in future git commits.     ###
+################################################################################
+
+# Custom Variable Values
+
+# Prefix for object creation
+prefix = "jc"
+
+# Name for AWS EC2 key
+ec2_key_name = "sslo-keypair"
+
+# AWS location
+region = "us-west-2"
+az     = "us-west-2a"
+
+# AMI IDs (Region-specific)
+sslo_ami       = "ami-06ceb79f3482bd83c" ### us-east-1 ### F5 BIG-IP VE - ALL (BYOL, 2 Boot Locations) ### 15.1.1 (SSLO 7.5)
+jumpbox_ami    = "ami-0aad84f764a2bd39a" ### us-east-1 ### Microsoft Windows Server 2019 Base
+inspection_ami = "ami-0cdc9ccb73322825f" ### us-east-1 ### Snort pre-configured by Miri Infotech Inc. on Ubuntu
+webapp_ami     = "ami-05343502b4149e010" ### us-east-1 ### WordPress with NGINX and SSL Certified by Bitnami and Automattic
+
+# BIG-IP VM instance type
+instance_type = "m5.4xlarge"
+
+# BYOL License Key required for SSL Orchestrator
+license_key = "JQUPN-XDRZR-PCYFF-DNNUM-HEMCKEJ"
+
+# Source list for management security group
+mgmt_src_addr_prefixes = ["99.244.215.84/32"]
+
+# 'admin' user password for BIG-IP
+admin_password = "f5Twister!"
+
+# VPC subnets
+vpc_cidrs = {
+  vpc         = "10.0.0.0/16"
+  management  = "10.0.1.0/24"
+  external    = "10.0.2.0/24"
+  dmz1        = "10.0.3.0/25"
+  dmz2        = "10.0.3.128/25"
+  dmz3        = "10.0.4.0/25"
+  dmz4        = "10.0.4.128/25"
+  internal    = "10.0.5.0/24"
+  application = "192.168.1.0/24"
+}

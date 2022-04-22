@@ -77,7 +77,7 @@ extension_services:
           myLicense:
             class: License
             licenseType: regKey
-            regKey:  ZCVSN-SREVP-SMWND-MVRIE-NSCVJIF
+            regKey:  ${license_key}
           My_DbVariables:
             class: DbVariables
             provision.extramb: 1000
@@ -105,7 +105,7 @@ extension_services:
               tagged: false
           internal-self:
             class: SelfIp
-            address: 10.0.5.9/24  
+            address: ${internal_selfip}
             vlan: internal
             allowService: default
             trafficGroup: traffic-group-local-only
@@ -118,7 +118,7 @@ extension_services:
               tagged: false
           external-self:
             class: SelfIp
-            address: 10.0.2.180/24
+            address: ${external_selfip}
             vlan: external
             allowService: default
             trafficGroup: traffic-group-local-only
@@ -152,8 +152,8 @@ extension_services:
               tagged: false 
           tgw-route:
             class: Route
-            gw: 10.0.5.1
-            network: 192.168.1.0/24
+            gw: ${tgw_route_gw}
+            network: ${tgw_route_dest}
             mtu: 1500
           My_System:
             class: System
@@ -162,7 +162,7 @@ extension_services:
           admin:
             class: User
             userType: regular
-            password: f5Twister!
+            password: ${admin_password}
             shell: bash
 EOF
 
