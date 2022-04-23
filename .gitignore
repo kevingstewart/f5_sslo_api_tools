@@ -34,3 +34,8 @@ override.tf.json
 # SSH Keys
 *.pem
 *.key
+*.pub
+
+# Ansible Vars
+*vars.yml
+*vars.yaml
