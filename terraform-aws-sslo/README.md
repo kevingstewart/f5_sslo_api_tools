@@ -75,7 +75,7 @@ When you are ready to delete your deployment
   ```
 
 
-## Steps for Manual SSL Orchestator Topology Configuration ##
+## Steps for Manual SSL Orchestrator Topology Configuration ##
 
 **TODO: review and correct configuration object field name references**
 
