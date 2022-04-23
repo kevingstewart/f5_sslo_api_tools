@@ -15,7 +15,6 @@ The Terraform does not automatically deploy an SSL Orchestrator Topology configu
 <br>
 
 ## Project Development ##
-<hr>
 
 This template was developed and tested in the **AWS US-East-1** region with the following versions:
 
@@ -25,7 +24,6 @@ This template was developed and tested in the **AWS US-East-1** region with the 
 <br>
 
 ## Usage ##
-<hr>
 
 - From a web browser client - subscribe to the following EC2 instances:
 
@@ -70,7 +68,6 @@ This template was developed and tested in the **AWS US-East-1** region with the 
 <br>
 
 ## Deleting the Deployment ##
-<hr>
 
 When you are ready to delete your deployment
   ```
@@ -79,7 +76,6 @@ When you are ready to delete your deployment
 
 
 ## Steps for Manual SSL Orchestator Topology Configuration ##
-<hr>
 
 **TODO: review and correct configuration object field name references**
 

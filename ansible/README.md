@@ -18,7 +18,6 @@ The accompanying Terraform files generate an Ansible Variables file that can be 
 <br>
 
 ## Project Development ##
-<hr>
 
 This template was developed and tested with the following versions:
 
@@ -27,12 +26,9 @@ This template was developed and tested with the following versions:
 <br>
 
 ## Usage ##
-<hr>
 
 - Deploy an Ansible config (after updating the YAML with correct IPs)
 
   ```
   ansible-playbook -i inventory/hosts playbooks/inbound-l3-complete.yaml
   ```
-
-  
