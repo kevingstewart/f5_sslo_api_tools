@@ -1,93 +1,147 @@
-# terraform-aws-sslo
-Terraform and Configuration Management files for an AWS SSLO deployment 
+# AWS SSL Orchestrator Infrastructure Deployment using Terraform
 
-Built and Tested with the following versions in AWS East Region.
-Terraform version v.0.14.5
-AWS Provider v3.57.0
+These Terraform configuration files will deploy an F5 SSL Orchestrator environment into Amazon Web Services (AWS).
 
-Region and AZ are set to East and 1a, these are set in the variables.tf
+The resulting deployment will consist of the following:
 
-Instance types are set in the variables.tf
+- Security VPC and various subnets for SSL Orchestrator and inspection devices
+- Application VPC and subnet for demo application
+- Demo application server (Wordpress)
+- F5 SSL Orchestrator (BIG-IP Virtual Edition)
+- Two layer 3 inspection devices
 
-Static private IP's are set for the BIG-IP, these are set in the f5_onboard.tmpl and in interfaces.tf
+The Terraform does not automatically deploy an SSL Orchestrator Topology configuration. However, it does generate an Ansible Variables file that can be used with the accompanying Ansible playbook to deploy an Inbound Layer 3 Topology. You can also manually configure and deploy the Topology instead.
 
-You will need a BYOL SSLO key/license to properly spin this up.  This is hardcoded in the f5_onboard.tmpl
+<br>
 
-Prefix is set in the variables.tf, set this to make your SSLO objects unique: the default is set to: "demo" 
+## Project Development ##
+<hr>
 
-User=admin Password=f5Twister! , this is configured for demo/dev enviroments only, it is recommend that you use a secrets manager like Secrets or Vault
+This template was developed and tested in the **AWS US-East-1** region with the following versions:
 
-SSLO has ATC packages installed and DO provisions SSLO and sets networking up via runtime-init in the f5_onboard.tmpl
+- Terraform v1.1.8 / AWS Provider v3.75.1
+- Terraform v0.14.5 / AWS Provider v3.57.0
 
-SSLO day 2 automation coming later(as3 or ansible)
+<br>
 
-This demo uses "Inspection" devices sitting in separate service chains to simulate real world deployments. These are a Linux hosts with Snort installed. Snort is not configured but it will bootstrap with appropriate routing and IP forwarding so that packets
-traverse the inspection zone and re-enter the DMZ2/DMZ4 interfaces.
+## Usage ##
+<hr>
 
-There are static IP addresses hard coded for ease of demo at the moment. The outputs at the completion of the Terraform will help with IP understanding.
+- From a web browser client - subscribe to the following EC2 instances:
 
-The VIP address is 10.0.2.200
+  - https://aws.amazon.com/marketplace/pp?sku=5n807t93duw392y7t8v7nb1zv
+  - https://aws.amazon.com/marketplace/pp?sku=758gbcgh7wafwchsq40cmj18j
+  - https://aws.amazon.com/marketplace/pp?sku=9jk8duinsir94459457myhn4q
+  - https://aws.amazon.com/marketplace/pp?sku=9jk8duinsir94459457myhn4q
+<br>
+<br>
 
-If the config fails, you should check where traffic is stopping.  A good place to start is at the F5. Do a tcpdump on the DMZ1 and DMZ3 interface...do you see traffic? yes then 
-tcpdump the DMZ2/DMZ4 interface....traffic? no....then its probably the Inspection devices and it didnt bootstrap properly.
+- Obtain your programmatic access credentials for your AWS account: Access Key ID, Access Key, and Session Token.
 
-ssh into the devices and check the route table, does it have a route to 10.0.2.0/24 via 10.0.4.23/10.0.7.23?
+- From inside your development environment - add a profile to you AWS credentials files or export the AWS credentials
+  ```
+  export AWS_ACCESS_KEY_ID="foo"
+  export AWS_SECRET_ACCESS_KEY="foo"
+  export AWS_SESSION_TOKEN="foo"
+  ```
 
-Run these commands to fix the routing issue, change the IP on the DMZ3/4 device to 10.0.7.23:
+- From the terraform-aws-sslo folder - Copy the included **terraform.tfvars.example** file to **terraform.tfvars** and update the values (they will override the defaults from the *variables.tf* file):
 
-sudo ip route add 10.0.2.0/24 via 10.0.4.23 dev eth2
+  - Set a unique prefix value for object creation
+  - Set a BIG-IP license key. You will need a BYOL SSL Orchestrator base registration key.
+  - Set a unique name for the EC2 keypair. Terraform will create the keypair in AWS and also save it to the current folder.
+  - Set the AWS region and availability (if different)
+  - Set the AMI ID for SSL Orchestrator (**sslo_ami**) if you wish to use a different software version
+  - Set the SSL Orchestrator instance type (if different). Ensure that you use an instance type that supports the 7 ENIs required for this deployment. This will usually be some variant of a **4xlarge** instance type.
+  - Set your SSL Orchestrator **admin** user password (use a strong password!). Note: This is configured for demo/dev enviroments only. The recommended practice is to use a secrets manager like Secrets or Vault to store the password.
 
-sudo sysctl -w net.ipv4.ip_forward=1
+<br>
+
+- From inside your development environment - deploy the Terraform configuration
+  ```
+  terraform init
+  terraform validate
+  terraform plan
+  terraform apply -auto-approve
+  ```
+
+- If there are no errors, Terraform  will output several values, including the public IP address to access the SSL Orchestrator TMUI/API.
+
+<br>
+
+## Deleting the Deployment ##
+<hr>
+
+When you are ready to delete your deployment
+  ```
+  terraform destroy
+  ```
 
 
+## Steps for Manual SSL Orchestator Topology Configuration ##
+<hr>
 
-Prereqs:
+**TODO: review and correct configuration object field name references**
 
-1. Terraform >= v.0.14.5
+- [optional] Upload a trusted SSL certificate and key before entering the SSL Orchestrator guide configuration UI
 
-2. Git installed on your local machine to clone this repo
+- Create an L3 Inbound topology
 
-3. An AWS account with programmatic access and Key Pair created
+- Define SSL settings (using either the default or the previously uploaded certificate and key)
 
-Steps to deploy:
+- Create the first inspection service
+  - Enter a name for the service
+  - Select a Layer 3 type from the service catalog
+  - De-select automatic network configuration
+  - Use **DMZ1** as the To-Service VLAN
+  - Enter the IP address of the inspection service (from Terraform outputs)
+  - Use **DMZ2** as the From-Service VLAN
+  - Enable Port remapping (e.g., 8000)
 
-1. Make sure you meet the prereqs
+- Create the second inspection service
+  - Enter a name for the service
+  - Select a different Layer 3 type from the service catalog
+  - De-select automatic network configuration
+  - Use **DMZ3** as the To-Service VLAN
+  - Enter the IP address of the inspection service (from Terraform outputs)
+  - Use **DMZ4** as the From-Service VLAN
+  - Enable Port remapping (e.g., 9000)
 
-2. Replace the hard coded license key in the f5_onboard.tmpl file
+- Create a Service Chain and add the first inspection service to it.
 
-3. run these commands:
+- Create a second Service Chain and add both inspection services to it.
 
-terraform init
+- In the Egress settings, use automap and network default route
 
-terraform plan
+- In the Security Policy rules, add the first Service Chain to the Default rule.
 
-terraform apply
+- Create a new rule with **FILL IN THE BLANK** condition and apply the second Service Chain to it.
 
-terraform destroy <-- when you are ready to tear it down
+- Deploy the Topology configuration.
 
-4. The BIG-IP SSLO is not configured, this is coming soon but all of the plumbing is in place
 
-Be sure to create the pool and pool member before configuring, this example uses a Wordpress App, IP address is outputted.
-
-5. Configure a L3 Inbound topology
-
-6. Use auto map and on the port remap use the default
-
-7. On the Egress, use automap and network default
-
-8. Use DMZ1 and DMZ3 Vlan for to
-
-9. Use DMZ2 and DMZ4 Vlan for from
-
-10. Put inspection_service_ip_1 in the first chain
-
-11. Put inspection_service_ip_2 in the second chain
-
-12. You will need to create an additional Rule to apply the second chain.  You can use "SSL Check is true" to ensure traffic intercepts and traverses both chains.
-
-<b>Inbound Traffic Diagram</b>
+**Inbound Traffic Diagram**
+*needs to be updated*
 
  ![f5](https://user-images.githubusercontent.com/18743780/134435723-a9216d8a-0cd7-463a-bda7-665eaaff9008.png)
 
+<br>
 
+<hr>
+<hr>
 
+**Misc notes - to be cleaned up later**
+
+- SSLO has ATC packages installed and DO provisions SSLO and sets networking up via runtime-init in the f5_onboard.tmpl
+
+- This demo uses "Inspection" devices sitting in separate service chains to simulate real world deployments. These are a Linux hosts with Snort installed. Snort is not configured but it will bootstrap with appropriate routing and IP forwarding so that packets traverse the inspection zone and re-enter the DMZ2/DMZ4 interfaces.
+
+- If the config fails, you should check where traffic is stopping.  A good place to start is at the F5. Do a tcpdump on the DMZ1 and DMZ3 interface...do you see traffic? yes then tcpdump the DMZ2/DMZ4 interface....traffic? no....then its probably the Inspection devices and it didnt bootstrap properly.
+
+- SSH into the devices and check the route table, does it have a route to 10.0.2.0/24 via 10.0.4.23/10.0.7.23?
+
+- Run these commands to fix the routing issue, change the IP on the DMZ3/4 device to 10.0.7.23:
+  ```
+  sudo ip route add 10.0.2.0/24 via 10.0.4.23 dev eth2
+  sudo sysctl -w net.ipv4.ip_forward=1
+  ```
