@@ -8,7 +8,7 @@ data "template_file" "f5_onboard" {
     license_key     = var.license_key
     admin_password  = var.admin_password
     internal_selfip = "${cidrhost(var.vpc_cidrs["internal"], 9)}/24"
-    external_selfip = "${cidrhost(var.vpc_cidrs["external"], 180) / 24}"
+    external_selfip = "${cidrhost(var.vpc_cidrs["external"], 180)}/24"
     tgw_route_gw    = "${cidrhost(var.vpc_cidrs["internal"], 1)}"
     tgw_route_dest  = var.vpc_cidrs["application"]
   }

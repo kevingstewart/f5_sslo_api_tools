@@ -60,7 +60,7 @@ output "sslo_vip" {
 
 output "webapp_internal" {
   value       = aws_instance.webapp-server.private_ip
-  description = "Private IP of the web app server" 
+  description = "Private IP of the web app server"
 }
 
 output "inspection_service_ip_1" {

@@ -1,7 +1,8 @@
 ################################################################################
-###                             EXAMPLE TFVARS FILE                          ### ################################################################################
+###                            EXAMPLE TFVARS FILE                           ###
+################################################################################
 ### Copy this file to 'terraform.tfvars' and modify as required              ###
-### The new terraform.tfvars file will be ignored in future git commits.     ###
+### The new terraform.tfvars file will be ignored in git commits.            ###
 ################################################################################
 
 # Custom Variable Values
