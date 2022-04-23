@@ -12,7 +12,6 @@ The resulting deployment will consist of the following:
 
 The Terraform does not automatically deploy an SSL Orchestrator Topology configuration. However, it does generate an Ansible Variables file that can be used with the accompanying Ansible playbook to deploy an Inbound Layer 3 Topology. You can also manually configure and deploy the Topology instead.
 
-<br>
 
 ## Project Development ##
 
@@ -21,7 +20,6 @@ This template was developed and tested in the **AWS US-East-1** region with the 
 - Terraform v1.1.8 / AWS Provider v3.75.1
 - Terraform v0.14.5 / AWS Provider v3.57.0
 
-<br>
 
 ## Usage ##
 
@@ -31,8 +29,6 @@ This template was developed and tested in the **AWS US-East-1** region with the 
   - https://aws.amazon.com/marketplace/pp?sku=758gbcgh7wafwchsq40cmj18j
   - https://aws.amazon.com/marketplace/pp?sku=9jk8duinsir94459457myhn4q
   - https://aws.amazon.com/marketplace/pp?sku=9jk8duinsir94459457myhn4q
-<br>
-<br>
 
 - Obtain your programmatic access credentials for your AWS account: Access Key ID, Access Key, and Session Token.
 
@@ -53,8 +49,6 @@ This template was developed and tested in the **AWS US-East-1** region with the 
   - Set the SSL Orchestrator instance type (if different). Ensure that you use an instance type that supports the 7 ENIs required for this deployment. This will usually be some variant of a **4xlarge** instance type.
   - Set your SSL Orchestrator **admin** user password (use a strong password!). Note: This is configured for demo/dev enviroments only. The recommended practice is to use a secrets manager like Secrets or Vault to store the password.
 
-<br>
-
 - From inside your development environment - deploy the Terraform configuration
   ```
   terraform init
@@ -65,7 +59,6 @@ This template was developed and tested in the **AWS US-East-1** region with the 
 
 - If there are no errors, Terraform  will output several values, including the public IP address to access the SSL Orchestrator TMUI/API.
 
-<br>
 
 ## Deleting the Deployment ##
 
@@ -121,9 +114,7 @@ When you are ready to delete your deployment
 
  ![f5](https://user-images.githubusercontent.com/18743780/134435723-a9216d8a-0cd7-463a-bda7-665eaaff9008.png)
 
-<br>
 
-<hr>
 <hr>
 
 **Misc notes - to be cleaned up later**

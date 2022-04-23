@@ -20,7 +20,7 @@ data "template_file" "f5_onboard" {
 resource "aws_instance" "sslo" {
   ami               = var.sslo_ami
   instance_type     = var.instance_type
-  key_name          = var.ec2_key_name
+  key_name          = aws_key_pair.my_keypair.key_name
   availability_zone = var.az
   depends_on        = [aws_internet_gateway.sslo_igw]
   user_data         = data.template_file.f5_onboard.rendered

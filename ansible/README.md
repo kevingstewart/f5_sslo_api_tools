@@ -15,7 +15,6 @@ The resulting Topology deployment will consist of the following:
 
 The accompanying Terraform files generate an Ansible Variables file that can be used with this playbook. 
 
-<br>
 
 ## Project Development ##
 
@@ -23,7 +22,6 @@ This template was developed and tested with the following versions:
 
 - SSL Ochestrator 7.5 / BIG-IP 15.1.1
 
-<br>
 
 ## Usage ##
 
