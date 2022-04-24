@@ -25,8 +25,18 @@ This template was developed and tested with the following versions:
 
 ## Usage ##
 
-- Deploy an Ansible config (after updating the YAML with correct IPs)
+- Option 1: Deploy an Ansible config using the variables file that was created by the accompanying Terraform.
 
   ```
-  ansible-playbook -i inventory/hosts playbooks/inbound-l3-complete.yaml
+  ansible-playbook -i inventory/hosts -e @../terraform-aws-sslo/ansible_vars.yaml playbooks/inbound-l3-complete.yaml
+  ```
+
+- Option 2: Deploy an Ansible config with your own variables file.
+
+  Use the 'ansible_vars.yaml.example' file as a template to create a custom 'ansible_vars.yaml' file and then update the variable values. 
+
+  ```
+  cp ansible_vars.yaml.example ansible_vars.yaml
+  vi ansible_vars.yaml
+  ansible-playbook -i inventory/hosts -e @ansible_vars.yaml playbooks/inbound-l3-complete.yaml
   ```

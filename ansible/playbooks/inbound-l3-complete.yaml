@@ -9,19 +9,17 @@
   connection: httpapi
 
   vars:
-    ansible_host: "34.234.171.124"
+    ansible_host: "{{ansible_host}}"
     ansible_httpapi_port: 443
     ansible_user: "admin"
-    ansible_httpapi_password: "f5Twister!"
+    ansible_httpapi_password: "{{ansible_httpapi_password}}"
     ansible_network_os: f5networks.f5_bigip.bigip
     ansible_httpapi_use_ssl: yes
     ansible_httpapi_validate_certs: no
 
-    snort1_host: "10.0.3.38"
-    snort2_host: "10.0.4.41"
-    webapp_pool: "192.168.1.38"
-
-    ## ======================= ##
+    snort1_host: "{{snort1_host}}"
+    snort2_host: "{{snort2_host}}"
+    webapp_pool: "{{webapp_pool}}"
 
     provider:
       server: "{{ ansible_host }}"
