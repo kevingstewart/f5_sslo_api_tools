@@ -97,6 +97,9 @@
       bigip_sslo_config_service_chain:
         name: "service_chain_2"
         services:
+        - service_name: "SNORT1"
+          type: "L3"
+          ip_family: "ipv4"
         - service_name: "SNORT2"
           type: "L3"
           ip_family: "ipv4"
@@ -107,14 +110,23 @@
         name: "sslopolicy"
         policy_consumer: "inbound"
         policy_rules:
-        - name: "all_ssl_traffic"
+        - name: "internal_traffic"
           policy_action: "allow"
           ssl_forwardproxy_action: "intercept"
           service_chain: "ssloSC_service_chain_1"
           conditions:
+          - condition_type: "client_ip_subnet_match"
+            condition_option_subnet:
+            - "10.0.0.0/8"
+        - name: "all_ssl_traffic"
+          policy_action: "allow"
+          ssl_forwardproxy_action: "intercept"
+          service_chain: "ssloSC_service_chain_2"
+          conditions:
           - condition_type: "server_port_match"
             condition_option_ports:
             - "443"
+
 
     ## Topology
     - name: Create SSLO Topology

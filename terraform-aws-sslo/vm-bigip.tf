@@ -39,7 +39,7 @@ resource "aws_network_interface" "bigip_internal" {
 
 ## Create dmz1 Network Interface for BIG-IP
 resource "aws_network_interface" "bigip_dmz1" {
-  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz1"], 11)}", "${cidrhost(var.vpc_cidrs["dmz1"], 8)}"]
+  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz1"], 7)}", "${cidrhost(var.vpc_cidrs["dmz1"], 8)}"]
   subnet_id         = aws_subnet.dmz1.id
   source_dest_check = "false"
   security_groups   = [aws_security_group.inspection_zone.id]
@@ -50,7 +50,7 @@ resource "aws_network_interface" "bigip_dmz1" {
 
 ## Create dmz2 Network Interface for BIG-IP
 resource "aws_network_interface" "bigip_dmz2" {
-  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz2"], 11)}", "${cidrhost(var.vpc_cidrs["dmz2"], 117)}"]
+  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz2"], 117)}", "${cidrhost(var.vpc_cidrs["dmz2"], 116)}"]
   subnet_id         = aws_subnet.dmz2.id
   source_dest_check = "false"
   security_groups   = [aws_security_group.inspection_zone.id]
@@ -61,7 +61,7 @@ resource "aws_network_interface" "bigip_dmz2" {
 
 ## Create dmz3 Network Interface for BIG-IP
 resource "aws_network_interface" "bigip_dmz3" {
-  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz3"], 11)}", "${cidrhost(var.vpc_cidrs["dmz3"], 8)}"]
+  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz3"], 7)}", "${cidrhost(var.vpc_cidrs["dmz3"], 8)}"]
   subnet_id         = aws_subnet.dmz3.id
   source_dest_check = "false"
   security_groups   = [aws_security_group.inspection_zone.id]
@@ -72,7 +72,7 @@ resource "aws_network_interface" "bigip_dmz3" {
 
 ## Create dmz4 Network Interface for BIG-IP
 resource "aws_network_interface" "bigip_dmz4" {
-  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz4"], 11)}", "${cidrhost(var.vpc_cidrs["dmz4"], 117)}"]
+  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz4"], 117)}", "${cidrhost(var.vpc_cidrs["dmz4"], 116)}"]
   subnet_id         = aws_subnet.dmz4.id
   source_dest_check = "false"
   security_groups   = [aws_security_group.inspection_zone.id]
