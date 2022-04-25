@@ -4,8 +4,8 @@ resource "aws_subnet" "management" {
   cidr_block        = var.vpc_cidrs["management"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-sslo-management"
-    Group_Name = "${var.prefix}-sslo-management"
+    Name       = "${var.prefix}-subnet_management"
+    Group_Name = "${var.prefix}-subnet_management"
   }
 }
 
@@ -16,56 +16,56 @@ resource "aws_subnet" "external" {
   cidr_block        = var.vpc_cidrs["external"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-sslo-external"
-    Group_Name = "${var.prefix}-sslo-external"
+    Name       = "${var.prefix}-subnet_external"
+    Group_Name = "${var.prefix}-subnet_external"
   }
 }
 
 
-## Create DMZ1 Subnet
-resource "aws_subnet" "DMZ1" {
+## Create dmz1 Subnet
+resource "aws_subnet" "dmz1" {
   vpc_id            = module.vpc.vpc_id
   cidr_block        = var.vpc_cidrs["dmz1"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-DMZ1"
-    Group_Name = "${var.prefix}-DMZ1"
+    Name       = "${var.prefix}-subnet_dmz1"
+    Group_Name = "${var.prefix}-subnet_dmz1"
   }
 }
 
 
-## Create DMZ2 Subnet
-resource "aws_subnet" "DMZ2" {
+## Create dmz2 Subnet
+resource "aws_subnet" "dmz2" {
   vpc_id            = module.vpc.vpc_id
   cidr_block        = var.vpc_cidrs["dmz2"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-DMZ2"
-    Group_Name = "${var.prefix}-DMZ2"
+    Name       = "${var.prefix}-subnet_dmz2"
+    Group_Name = "${var.prefix}-subnet_dmz2"
   }
 }
 
 
-## Create DMZ3 Subnet
-resource "aws_subnet" "DMZ3" {
+## Create dmz3 Subnet
+resource "aws_subnet" "dmz3" {
   vpc_id            = module.vpc.vpc_id
   cidr_block        = var.vpc_cidrs["dmz3"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-DMZ3"
-    Group_Name = "${var.prefix}-DMZ3"
+    Name       = "${var.prefix}-subnet_dmz3"
+    Group_Name = "${var.prefix}-subnet_dmz3"
   }
 }
 
 
-## Create DMZ4 Subnet
-resource "aws_subnet" "DMZ4" {
+## Create dmz4 Subnet
+resource "aws_subnet" "dmz4" {
   vpc_id            = module.vpc.vpc_id
   cidr_block        = var.vpc_cidrs["dmz4"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-DMZ4"
-    Group_Name = "${var.prefix}-DMZ4"
+    Name       = "${var.prefix}-subnet_dmz4"
+    Group_Name = "${var.prefix}-subnet_dmz4"
   }
 }
 
@@ -76,19 +76,19 @@ resource "aws_subnet" "internal" {
   cidr_block        = var.vpc_cidrs["internal"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-internal"
-    Group_Name = "${var.prefix}-internal"
+    Name       = "${var.prefix}-subnet_internal"
+    Group_Name = "${var.prefix}-subnet_internal"
   }
 }
 
 
-## Create TGW App Subnet
-resource "aws_subnet" "tgw-appstack" {
+## Create Application Subnet
+resource "aws_subnet" "application" {
   vpc_id            = aws_vpc.appstack.id
   cidr_block        = var.vpc_cidrs["application"]
   availability_zone = var.az
   tags = {
-    Name       = "${var.prefix}-tgw-appstack"
-    Group_Name = "${var.prefix}-tgw-appstack"
+    Name       = "${var.prefix}-subnet_application"
+    Group_Name = "${var.prefix}-subnet_application"
   }
 }

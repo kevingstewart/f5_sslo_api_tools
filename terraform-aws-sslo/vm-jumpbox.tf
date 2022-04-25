@@ -13,18 +13,18 @@ resource "aws_eip" "jumpbox" {
 }
 
 ## Create Management Network Interface for Jumpbox
-resource "aws_network_interface" "sslo_jumpbox_management" {
+resource "aws_network_interface" "jumpbox_mgmt" {
   subnet_id         = aws_subnet.management.id
   source_dest_check = "false"
-  security_groups   = [aws_security_group.sslo_management.id]
+  security_groups   = [aws_security_group.management.id]
   tags = {
-    Name = "${var.prefix}-sslo_management_jumpbox_interface"
+    Name = "${var.prefix}-eni_jumpbox_mgmtmgmt"
   }
 }
 
 ## Create EIP Association with Jump Box Management Interface
 resource "aws_eip_association" "jumpbox_eip" {
-  network_interface_id = aws_network_interface.sslo_jumpbox_management.id
+  network_interface_id = aws_network_interface.jumpbox_mgmt.id
   allocation_id        = aws_eip.jumpbox.id
 }
 
@@ -35,12 +35,12 @@ resource "aws_instance" "jumpbox" {
   instance_type               = "m5.2xlarge"
   key_name                    = aws_key_pair.my_keypair.key_name  
   availability_zone           = var.az
-  depends_on                  = [aws_internet_gateway.sslo_igw]
+  depends_on                  = [aws_internet_gateway.sslo]
   tags = {
-    Name = "${var.prefix}-sslo-jumpbox"
+    Name = "${var.prefix}-vm_jumpbox"
   }
   network_interface {
-    network_interface_id      = aws_network_interface.sslo_jumpbox_management.id
+    network_interface_id      = aws_network_interface.jumpbox_mgmt.id
     device_index              = 0
   }
 }

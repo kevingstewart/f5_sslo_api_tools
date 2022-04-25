@@ -44,6 +44,11 @@ variable "vpc_cidrs" {
   type        = map(string)
 }
 
+variable "app_vip" {
+  description = "IP address of BIG-IP virtual server"
+  type        = string
+}
+
 variable "instance_type" {
   description = "BIG-IP VM instance type - *.4xlarge supports up to 8 ENIs"
   type        = string

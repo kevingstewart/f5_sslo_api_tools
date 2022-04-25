@@ -3,32 +3,34 @@
 #
 
 ## Create Management Network Interface for Inspection Device 2
-resource "aws_network_interface" "sslo_inspection_device_management_2" {
+resource "aws_network_interface" "inspection_device_2_mgmt" {
   subnet_id         = aws_subnet.management.id
   source_dest_check = "false"
-  security_groups   = [aws_security_group.sslo_management.id]
+  security_groups   = [aws_security_group.management.id]
   tags = {
-    Name = "${var.prefix}-sslo_inspection_device_management_2"
+    Name = "${var.prefix}-eni_inspection_device_2_mgmt"
   }
 }
 
-## Create DMZ3 Network Interface for Inspection Device 2
-resource "aws_network_interface" "sslo_inspection_device_dmz3" {
-  subnet_id         = aws_subnet.DMZ3.id
+## Create dmz3 Network Interface for Inspection Device 2
+resource "aws_network_interface" "inspection_device_2_dmz3" {
+  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz3"], 21)}"]
+  subnet_id         = aws_subnet.dmz3.id
   source_dest_check = "false"
-  security_groups   = [aws_security_group.sslo_inspection_zone.id]
+  security_groups   = [aws_security_group.inspection_zone.id]
   tags = {
-    Name = "${var.prefix}-sslo_inspection_device_dmz3"
+    Name = "${var.prefix}-eni_inspection_device_2_dmz3"
   }
 }
 
-## Create DMZ4 Network Interface for Inspection Device 2
-resource "aws_network_interface" "sslo_inspection_device_dmz4" {
-  subnet_id         = aws_subnet.DMZ4.id
+## Create dmz4 Network Interface for Inspection Device 2
+resource "aws_network_interface" "inspection_device_2_dmz4" {
+  private_ips       = ["${cidrhost(var.vpc_cidrs["dmz4"], 21)}"]
+  subnet_id         = aws_subnet.dmz4.id
   source_dest_check = "false"
-  security_groups   = [aws_security_group.sslo_inspection_zone.id]
+  security_groups   = [aws_security_group.inspection_zone.id]
   tags = {
-    Name = "${var.prefix}-sslo_inspection_device_dmz4"
+    Name = "${var.prefix}-eni_inspection_device_2_dmz4"
   }
 }
 
@@ -39,26 +41,28 @@ resource "aws_instance" "inspection_device_2" {
   instance_type     = "t2.small"
   key_name          = aws_key_pair.my_keypair.key_name
   availability_zone = var.az
-  depends_on        = [aws_internet_gateway.sslo_igw]
+  depends_on        = [aws_internet_gateway.sslo]
   user_data         = <<-EOF
                       #!/bin/bash
-                      sudo ip route add 10.0.2.0/24 via 10.0.4.245 dev eth2
+                      sudo ip route delete default
+                      sudo ip route add default via ${cidrhost(var.vpc_cidrs["dmz3"], 1)} dev eth1
+                      sudo ip route add ${var.vpc_cidrs["application"]} via ${cidrhost(var.vpc_cidrs["dmz4"], 1)} dev eth2
                       sudo sysctl -w net.ipv4.ip_forward=1
                       EOF
 
   tags = {
-    Name = "${var.prefix}-sslo-inspection-device-2"
+    Name = "${var.prefix}-vm_inspection_device_2"
   }
   network_interface {
-    network_interface_id = aws_network_interface.sslo_inspection_device_management_2.id
+    network_interface_id = aws_network_interface.inspection_device_2_mgmt.id
     device_index         = 0
   }
   network_interface {
-    network_interface_id = aws_network_interface.sslo_inspection_device_dmz3.id
+    network_interface_id = aws_network_interface.inspection_device_2_dmz3.id
     device_index         = 1
   }
   network_interface {
-    network_interface_id = aws_network_interface.sslo_inspection_device_dmz4.id
+    network_interface_id = aws_network_interface.inspection_device_2_dmz4.id
     device_index         = 2
   }
 }
