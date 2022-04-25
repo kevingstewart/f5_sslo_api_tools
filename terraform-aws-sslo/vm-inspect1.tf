@@ -37,11 +37,11 @@ resource "aws_network_interface" "inspection_device_1_dmz2" {
 
 ## Inspection Device 1 
 resource "aws_instance" "inspection_device_1" {
+  #depends_on        = [aws_internet_gateway.sslo]
   ami               = var.inspection_ami
   instance_type     = "t2.small"
   key_name          = aws_key_pair.my_keypair.key_name
   availability_zone = var.az
-  depends_on        = [aws_internet_gateway.sslo]
   user_data         = <<-EOF
                       #!/bin/bash
                       sudo ip route delete default

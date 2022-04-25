@@ -103,7 +103,9 @@ resource "aws_eip" "sslo_vip" {
 }
 
 
-## Create BIG-IP
+#
+# BIG-IP
+#
 
 ## Generate cloud-init script for BIG-IP
 data "template_file" "f5_onboard" {
@@ -111,20 +113,21 @@ data "template_file" "f5_onboard" {
   vars = {
     license_key     = var.license_key
     admin_password  = var.admin_password
-    internal_selfip = "${cidrhost(var.vpc_cidrs["internal"], 9)}/24"
-    external_selfip = "${cidrhost(var.vpc_cidrs["external"], 180)}/24"
-    tgw_route_gw    = "${cidrhost(var.vpc_cidrs["internal"], 1)}"
-    tgw_route_dest  = var.vpc_cidrs["application"]
+    internal_selfip = "${cidrhost(var.vpc_cidrs["internal"], 11)}/24"
+    external_selfip = "${cidrhost(var.vpc_cidrs["external"], 11)}/24"
+    app_route_dest  = var.vpc_cidrs["application"]
+    app_route_gw    = "${cidrhost(var.vpc_cidrs["internal"], 1)}"
+    sslo_pkg_name   = var.sslo_pkg_name
   }
 }
 
 ## Create BIG-IP
 resource "aws_instance" "sslo" {
+  depends_on        = [aws_eip.bigip_management, aws_route_table_association.management]
   ami               = var.sslo_ami
   instance_type     = var.instance_type
   key_name          = aws_key_pair.my_keypair.key_name
   availability_zone = var.az
-  depends_on        = [aws_internet_gateway.sslo]
   user_data         = data.template_file.f5_onboard.rendered
   tags = {
     Name = "${var.prefix}-vm_bigip_sslo"

@@ -30,12 +30,11 @@ resource "aws_eip_association" "jumpbox_eip" {
 
 ## Create jump host
 resource "aws_instance" "jumpbox" {
-
+  #depends_on                  = [aws_internet_gateway.sslo]
   ami                         = var.jumpbox_ami
   instance_type               = "m5.2xlarge"
   key_name                    = aws_key_pair.my_keypair.key_name  
   availability_zone           = var.az
-  depends_on                  = [aws_internet_gateway.sslo]
   tags = {
     Name = "${var.prefix}-vm_jumpbox"
   }

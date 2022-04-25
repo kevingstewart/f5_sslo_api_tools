@@ -17,25 +17,6 @@ ec2_key_name = "sslo-keypair"
 region = "us-east-1"
 az     = "us-east-1a"
 
-# AMI IDs (Region-specific)
-sslo_ami       = "ami-06ceb79f3482bd83c" ### us-east-1 ### F5 BIG-IP VE - ALL (BYOL, 2 Boot Locations) ### 15.1.1 (SSLO 7.5)
-jumpbox_ami    = "ami-0aad84f764a2bd39a" ### us-east-1 ### Microsoft Windows Server 2019 Base
-inspection_ami = "ami-0cdc9ccb73322825f" ### us-east-1 ### Snort pre-configured by Miri Infotech Inc. on Ubuntu
-webapp_ami     = "ami-05343502b4149e010" ### us-east-1 ### WordPress with NGINX and SSL Certified by Bitnami and Automattic
-
-# BIG-IP VM instance type
-instance_type = "m5.4xlarge"
-
-# BYOL License Key required for SSL Orchestrator
-license_key = "AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE"
-
-# Source list for management security group
-# !!! Add your own source IP and bitmask here to restrict access!!!
-mgmt_src_addr_prefixes = ["0.0.0.0/0"]
-
-# 'admin' user password for BIG-IP
-admin_password = "f5Twister!"
-
 # VPC subnets
 vpc_cidrs = {
   vpc         = "10.0.0.0/16"
@@ -48,3 +29,28 @@ vpc_cidrs = {
   internal    = "10.0.5.0/24"
   application = "192.168.1.0/24"
 }
+
+# BIG-IP Virtual Server IP Address for Inbound Layer 3 Topology demo
+app_vip = "10.0.2.200"
+
+# BIG-IP VM instance type
+instance_type = "m5.4xlarge"
+
+# AMI IDs (Region-specific)
+jumpbox_ami    = "ami-0aad84f764a2bd39a" ### us-east-1 ### Microsoft Windows Server 2019 Base
+inspection_ami = "ami-0cdc9ccb73322825f" ### us-east-1 ### Snort pre-configured by Miri Infotech Inc. on Ubuntu
+webapp_ami     = "ami-05343502b4149e010" ### us-east-1 ### WordPress with NGINX and SSL Certified by Bitnami and Automattic
+sslo_ami       = "ami-06ceb79f3482bd83c" ### us-east-1 ### F5 BIG-IP VE - ALL (BYOL, 2 Boot Locations) ### 15.1.1 (SSLO 7.5)
+
+sslo_pkg_name = "f5-iappslx-ssl-orchestrator-15.1.0-7.5.2.noarch.rpm" ### BIG-IP 15.1 (SSLO 7.5)
+#sslo_pkg_name = "f5-iappslx-ssl-orchestrator-16.1.0-9.0.24.noarch.rpm"   ### BIG-IP 16.1 (SSLO 9.0)
+
+# BYOL License Key required for SSL Orchestrator
+# license_key = "AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE"
+
+# Source list for management security group
+# !!! Add your own source IP and bitmask here to restrict access!!!
+mgmt_src_addr_prefixes = ["0.0.0.0/0"]
+
+# 'admin' user password for BIG-IP
+admin_password = "f5Twister!"

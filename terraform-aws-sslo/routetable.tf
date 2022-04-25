@@ -20,6 +20,7 @@ resource "aws_route_table" "internet" {
   }
 }
 
+
 # Create the Main SSLO Security Stack Route Table association
 resource "aws_main_route_table_association" "main" {
   vpc_id         = aws_vpc.securitystack.id

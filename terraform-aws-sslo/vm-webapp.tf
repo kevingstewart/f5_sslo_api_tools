@@ -12,11 +12,11 @@ resource "aws_network_interface" "webapp" {
 ## Create Test WebApp Server
 
 resource "aws_instance" "webapp-server" {
+  #depends_on        = [aws_internet_gateway.sslo]
   ami               = var.webapp_ami
   instance_type     = "t3.small"
   key_name          = aws_key_pair.my_keypair.key_name
   availability_zone = var.az
-  depends_on        = [aws_internet_gateway.sslo]
   tags = {
     Name = "${var.prefix}-vm_webapp"
   }

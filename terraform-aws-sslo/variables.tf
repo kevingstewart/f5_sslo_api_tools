@@ -55,10 +55,9 @@ variable "instance_type" {
   default     = "m5.4xlarge"
 }
 
-variable "jumpbox_ami" {
-  description = "Jumphost AMI - Default: Windows Server 2019 Base (us-east-1)"
+variable "sslo_pkg_name" {
+  description = "SSL Orchestrator built-in RPM package name (dependent on BIG-IP version)"
   type        = string
-  default     = "ami-0aad84f764a2bd39a"
 }
 
 variable "sslo_ami" {
@@ -77,4 +76,10 @@ variable "webapp_ami" {
   description = "Test web app AMI - Default: Wordpress"
   type        = string
   default     = "ami-05343502b4149e010"
+}
+
+variable "jumpbox_ami" {
+  description = "Jumphost AMI - Default: Windows Server 2019 Base (us-east-1)"
+  type        = string
+  default     = "ami-0aad84f764a2bd39a"
 }
