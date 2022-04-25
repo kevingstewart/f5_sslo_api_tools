@@ -1,6 +1,6 @@
 ## Create Security Group for Management
 resource "aws_security_group" "management" {
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.securitystack.id
   description = "sg_management"
   name        = "sg_management"
   tags = {
@@ -24,7 +24,7 @@ resource "aws_security_group" "management" {
 
 ## Create Security Group for External
 resource "aws_security_group" "external" {
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.securitystack.id
   description = "sg_external"
   name        = "sg_external"
   tags = {
@@ -48,7 +48,7 @@ resource "aws_security_group" "external" {
 
 ## Create Security Group for Internal
 resource "aws_security_group" "internal" {
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.securitystack.id
   description = "sg_internal"
   name        = "sg_internal"
   tags = {
@@ -72,7 +72,7 @@ resource "aws_security_group" "internal" {
 
 ## Create Security Group for Inspection Zone
 resource "aws_security_group" "inspection_zone" {
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.securitystack.id
   description = "sg_inspection_zone"
   name        = "sg_inspection_zone"
   tags = {

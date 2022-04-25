@@ -1,12 +1,11 @@
-## Create the VPC's for both stacks
+## Create the VPCs for both stacks
 
-module "vpc" {
-  source               = "terraform-aws-modules/vpc/aws"
-  name                 = "${var.prefix}-sslo-securitystack"
-  cidr                 = var.vpc_cidrs["vpc"]
-  azs                  = [var.az]
-  enable_nat_gateway   = "true"
+resource "aws_vpc" "securitystack" {
+  cidr_block           = var.vpc_cidrs["vpc"]
   enable_dns_hostnames = "true"
+  tags = {
+    Name = "${var.prefix}-sslo-securitystack"
+  }
 }
 
 resource "aws_vpc" "appstack" {

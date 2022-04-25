@@ -11,7 +11,7 @@ resource "aws_ec2_transit_gateway" "sslo" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "securitystack" {
   subnet_ids             = [aws_subnet.internal.id]
   transit_gateway_id     = aws_ec2_transit_gateway.sslo.id
-  vpc_id                 = module.vpc.vpc_id
+  vpc_id                 = aws_vpc.securitystack.id
   appliance_mode_support = "enable"
   tags = {
     Name = "${var.prefix}-tgw_attachment_securitystack"

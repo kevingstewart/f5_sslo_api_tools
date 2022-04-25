@@ -1,6 +1,6 @@
 ## Create Management Subnet 
 resource "aws_subnet" "management" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = aws_vpc.securitystack.id
   cidr_block        = var.vpc_cidrs["management"]
   availability_zone = var.az
   tags = {
@@ -12,7 +12,7 @@ resource "aws_subnet" "management" {
 
 ## Create External Subnet
 resource "aws_subnet" "external" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = aws_vpc.securitystack.id
   cidr_block        = var.vpc_cidrs["external"]
   availability_zone = var.az
   tags = {
@@ -24,7 +24,7 @@ resource "aws_subnet" "external" {
 
 ## Create dmz1 Subnet
 resource "aws_subnet" "dmz1" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = aws_vpc.securitystack.id
   cidr_block        = var.vpc_cidrs["dmz1"]
   availability_zone = var.az
   tags = {
@@ -36,7 +36,7 @@ resource "aws_subnet" "dmz1" {
 
 ## Create dmz2 Subnet
 resource "aws_subnet" "dmz2" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = aws_vpc.securitystack.id
   cidr_block        = var.vpc_cidrs["dmz2"]
   availability_zone = var.az
   tags = {
@@ -48,7 +48,7 @@ resource "aws_subnet" "dmz2" {
 
 ## Create dmz3 Subnet
 resource "aws_subnet" "dmz3" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = aws_vpc.securitystack.id
   cidr_block        = var.vpc_cidrs["dmz3"]
   availability_zone = var.az
   tags = {
@@ -60,7 +60,7 @@ resource "aws_subnet" "dmz3" {
 
 ## Create dmz4 Subnet
 resource "aws_subnet" "dmz4" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = aws_vpc.securitystack.id
   cidr_block        = var.vpc_cidrs["dmz4"]
   availability_zone = var.az
   tags = {
@@ -72,7 +72,7 @@ resource "aws_subnet" "dmz4" {
 
 ## Create Internal Subnet
 resource "aws_subnet" "internal" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = aws_vpc.securitystack.id
   cidr_block        = var.vpc_cidrs["internal"]
   availability_zone = var.az
   tags = {

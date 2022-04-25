@@ -1,6 +1,6 @@
 ## Create the IGW
 resource "aws_internet_gateway" "sslo" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.securitystack.id
   tags = {
     Name = "${var.prefix}-igw_sslo"
   }
@@ -9,7 +9,7 @@ resource "aws_internet_gateway" "sslo" {
 
 ## Create the Route Table for 'management' and 'external' subnets
 resource "aws_route_table" "internet" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.securitystack.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.sslo.id
@@ -22,7 +22,7 @@ resource "aws_route_table" "internet" {
 
 # Create the Main SSLO Security Stack Route Table association
 resource "aws_main_route_table_association" "main" {
-  vpc_id         = module.vpc.vpc_id
+  vpc_id         = aws_vpc.securitystack.id
   route_table_id = aws_route_table.internet.id
 }
 
@@ -40,7 +40,7 @@ resource "aws_route_table_association" "external" {
 
 ## Create the Route Table for 'dmz1' subnet
 resource "aws_route_table" "dmz1" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.securitystack.id
   route {
     cidr_block           = "0.0.0.0/0"
     network_interface_id = aws_network_interface.bigip_dmz1.id
@@ -63,7 +63,7 @@ resource "aws_route_table_association" "dmz1" {
 
 ## Create the Route Table for 'dmz2' subnet
 resource "aws_route_table" "dmz2" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.securitystack.id
   route {
     cidr_block           = "0.0.0.0/0"
     network_interface_id = aws_network_interface.inspection_device_1_dmz2.id
@@ -86,7 +86,7 @@ resource "aws_route_table_association" "dmz2" {
 
 ## Create the Route Table for 'dmz3' subnet
 resource "aws_route_table" "dmz3" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.securitystack.id
   route {
     cidr_block           = "0.0.0.0/0"
     network_interface_id = aws_network_interface.bigip_dmz3.id
@@ -109,7 +109,7 @@ resource "aws_route_table_association" "dmz3" {
 
 ## Create the Route Table for 'dmz4' subnet
 resource "aws_route_table" "dmz4" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.securitystack.id
   route {
     cidr_block           = "0.0.0.0/0"
     network_interface_id = aws_network_interface.inspection_device_2_dmz4.id
@@ -132,7 +132,7 @@ resource "aws_route_table_association" "dmz4" {
 
 ## Create the Route Table for 'internal' subnet
 resource "aws_route_table" "internal" {
-  vpc_id = module.vpc.vpc_id
+  vpc_id = aws_vpc.securitystack.id
   #route {
   #  cidr_block           = "0.0.0.0/0"
   #  network_interface_id = aws_network_interface.bigip_internal.id
