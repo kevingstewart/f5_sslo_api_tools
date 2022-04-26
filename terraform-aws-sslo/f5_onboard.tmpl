@@ -150,10 +150,10 @@ extension_services:
             interfaces:
             - name: '1.6'
               tagged: false 
-          tgw-route:
+          app-route:
             class: Route
-            gw: ${tgw_route_gw}
-            network: ${tgw_route_dest}
+            network: ${app_route_dest}
+            gw: ${app_route_gw}
             mtu: 1500
           My_System:
             class: System
@@ -176,4 +176,8 @@ bash /var/config/rest/downloads/f5-bigip-runtime-init.gz.run -- '--cloud aws'
 # Run
 # export F5_BIGIP_RUNTIME_INIT_LOG_LEVEL=silly
 f5-bigip-runtime-init --config-file /config/cloud/runtime-init-conf.yaml
+
+# Activate the built-in SSL Orchestrator package - filename is dependent on BIG-IP version that you are deploying
+curl -sku 'admin:${admin_password}' -H 'Content-Type: application/json' -X POST "https://localhost/mgmt/shared/iapp/package-management-tasks" -d '{"operation":"INSTALL", "packageFilePath":"/var/config/rest/downloads/${sslo_pkg_name}"}'
+
 echo "$(date +"%Y-%m-%dT%H:%M:%S.%3NZ") : Startup Script Finish"

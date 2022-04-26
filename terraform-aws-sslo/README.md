@@ -82,18 +82,18 @@ When you are ready to delete your deployment
   - Enter a name for the service
   - Select a Layer 3 type from the service catalog
   - De-select automatic network configuration
-  - Use **DMZ1** as the To-Service VLAN
+  - Use **dmz1** as the To-Service VLAN
   - Enter the IP address of the inspection service (from Terraform outputs)
-  - Use **DMZ2** as the From-Service VLAN
+  - Use **dmz2** as the From-Service VLAN
   - Enable Port remapping (e.g., 8000)
 
 - Create the second inspection service
   - Enter a name for the service
   - Select a different Layer 3 type from the service catalog
   - De-select automatic network configuration
-  - Use **DMZ3** as the To-Service VLAN
+  - Use **dmz3** as the To-Service VLAN
   - Enter the IP address of the inspection service (from Terraform outputs)
-  - Use **DMZ4** as the From-Service VLAN
+  - Use **dmz4** as the From-Service VLAN
   - Enable Port remapping (e.g., 9000)
 
 - Create a Service Chain and add the first inspection service to it.
@@ -121,13 +121,13 @@ When you are ready to delete your deployment
 
 - SSLO has ATC packages installed and DO provisions SSLO and sets networking up via runtime-init in the f5_onboard.tmpl
 
-- This demo uses "Inspection" devices sitting in separate service chains to simulate real world deployments. These are a Linux hosts with Snort installed. Snort is not configured but it will bootstrap with appropriate routing and IP forwarding so that packets traverse the inspection zone and re-enter the DMZ2/DMZ4 interfaces.
+- This demo uses "Inspection" devices sitting in separate service chains to simulate real world deployments. These are a Linux hosts with Snort installed. Snort is not configured but it will bootstrap with appropriate routing and IP forwarding so that packets traverse the inspection zone and re-enter the dmz2/dmz4 interfaces.
 
-- If the config fails, you should check where traffic is stopping.  A good place to start is at the F5. Do a tcpdump on the DMZ1 and DMZ3 interface...do you see traffic? yes then tcpdump the DMZ2/DMZ4 interface....traffic? no....then its probably the Inspection devices and it didnt bootstrap properly.
+- If the config fails, you should check where traffic is stopping.  A good place to start is at the F5. Do a tcpdump on the dmz1 and dmz3 interface...do you see traffic? yes then tcpdump the dmz2/dmz4 interface....traffic? no....then its probably the Inspection devices and it didnt bootstrap properly.
 
 - SSH into the devices and check the route table, does it have a route to 10.0.2.0/24 via 10.0.4.23/10.0.7.23?
 
-- Run these commands to fix the routing issue, change the IP on the DMZ3/4 device to 10.0.7.23:
+- Run these commands to fix the routing issue, change the IP on the dmz3/4 device to 10.0.7.23:
   ```
   sudo ip route add 10.0.2.0/24 via 10.0.4.23 dev eth2
   sudo sysctl -w net.ipv4.ip_forward=1

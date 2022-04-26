@@ -10,10 +10,11 @@ The resulting Topology deployment will consist of the following:
   - Service Chain 1 - inspection device 1
   - Service Chain 2 - inspection device 1, inspection device 2
 - 2 Security Policy rules
-  - default - Service Chain 1
-  - XXXXX condition - Service Chain 2
+  - internal traffic - Service Chain 1
+  - all ssl traffic - Service Chain 2
 
-The accompanying Terraform files generate an Ansible Variables file that can be used with this playbook. 
+
+The accompanying Terraform files generate an Ansible variables file (ansible_vars.yaml) that can be used with this playbook. 
 
 
 ## Project Development ##
@@ -28,7 +29,8 @@ This template was developed and tested with the following versions:
 - Option 1: Deploy an Ansible config using the variables file that was created by the accompanying Terraform.
 
   ```
-  ansible-playbook -i inventory/hosts -e @../terraform-aws-sslo/ansible_vars.yaml playbooks/inbound-l3-complete.yaml
+  cp ../terraform-aws-sslo/ansible_vars.yaml .
+  ansible-playbook -e @ansible_vars.yaml playbooks/inbound-l3-complete.yaml
   ```
 
 - Option 2: Deploy an Ansible config with your own variables file.
@@ -38,5 +40,5 @@ This template was developed and tested with the following versions:
   ```
   cp ansible_vars.yaml.example ansible_vars.yaml
   vi ansible_vars.yaml
-  ansible-playbook -i inventory/hosts -e @ansible_vars.yaml playbooks/inbound-l3-complete.yaml
+  ansible-playbook -e @ansible_vars.yaml playbooks/inbound-l3-complete.yaml
   ```

@@ -1,10 +1,10 @@
 ## Create Security Group for Management
-resource "aws_security_group" "sslo_management" {
-  vpc_id      = module.vpc.vpc_id
-  description = "sslo_sg_management"
-  name        = "sslo_sg_management"
+resource "aws_security_group" "management" {
+  vpc_id      = aws_vpc.securitystack.id
+  description = "sg_management"
+  name        = "sg_management"
   tags = {
-    Name = "${var.prefix}-sslo_sg_management"
+    Name = "${var.prefix}-sg_management"
   }
   ingress {
     # SSH (change to whatever ports you need)
@@ -23,12 +23,12 @@ resource "aws_security_group" "sslo_management" {
 
 
 ## Create Security Group for External
-resource "aws_security_group" "sslo_external" {
-  vpc_id      = module.vpc.vpc_id
-  description = "sslo_sg_external"
-  name        = "sslo_sg_external"
+resource "aws_security_group" "external" {
+  vpc_id      = aws_vpc.securitystack.id
+  description = "sg_external"
+  name        = "sg_external"
   tags = {
-    Name = "${var.prefix}-sslo_sg_external"
+    Name = "${var.prefix}-sg_external"
   }
   ingress {
     from_port   = 0
@@ -47,12 +47,12 @@ resource "aws_security_group" "sslo_external" {
 
 
 ## Create Security Group for Internal
-resource "aws_security_group" "sslo_internal" {
-  vpc_id      = module.vpc.vpc_id
-  description = "sslo_sg_internal"
-  name        = "sslo_sg_internal"
+resource "aws_security_group" "internal" {
+  vpc_id      = aws_vpc.securitystack.id
+  description = "sg_internal"
+  name        = "sg_internal"
   tags = {
-    Name = "${var.prefix}-sslo_sg_internal"
+    Name = "${var.prefix}-sg_internal"
   }
   ingress {
     from_port   = 0
@@ -71,12 +71,12 @@ resource "aws_security_group" "sslo_internal" {
 
 
 ## Create Security Group for Inspection Zone
-resource "aws_security_group" "sslo_inspection_zone" {
-  vpc_id      = module.vpc.vpc_id
-  description = "sslo_sg_inspection_zone"
-  name        = "sslo_sg_inspection_zone"
+resource "aws_security_group" "inspection_zone" {
+  vpc_id      = aws_vpc.securitystack.id
+  description = "sg_inspection_zone"
+  name        = "sg_inspection_zone"
   tags = {
-    Name = "${var.prefix}-sslo_sg_inspection_zone"
+    Name = "${var.prefix}-sg_inspection_zone"
   }
   ingress {
     # Allow All (change to whatever ports you need)
@@ -96,12 +96,12 @@ resource "aws_security_group" "sslo_inspection_zone" {
 
 
 ## Create Security Group for TGW Webapp
-resource "aws_security_group" "sslo_appstack" {
+resource "aws_security_group" "appstack" {
   vpc_id      = aws_vpc.appstack.id
-  description = "sslo_sg_appstack"
-  name        = "sslo_sg_appstack"
+  description = "sg_appstack"
+  name        = "sg_appstack"
   tags = {
-    Name = "${var.prefix}-sslo_sg_appstack"
+    Name = "${var.prefix}-sg_appstack"
   }
   ingress {
     from_port   = 0

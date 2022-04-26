@@ -1,118 +1,179 @@
-## Create the SSLO Security Stack Route Table
-resource "aws_route_table" "sslo-route-table" {
-  vpc_id = module.vpc.vpc_id
+## Create the IGW
+resource "aws_internet_gateway" "sslo" {
+  vpc_id = aws_vpc.securitystack.id
+  tags = {
+    Name = "${var.prefix}-igw_sslo"
+  }
+}
+
+
+## Create the Route Table for 'management' and 'external' subnets
+resource "aws_route_table" "internet" {
+  vpc_id = aws_vpc.securitystack.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.sslo_igw.id
+    gateway_id = aws_internet_gateway.sslo.id
   }
-  route {
-    cidr_block         = var.vpc_cidrs["application"]
-    transit_gateway_id = aws_ec2_transit_gateway.sslo-tgw.id
-  }
+
   tags = {
-    Name = "${var.prefix}-sslo-route-table"
+    Name = "${var.prefix}-rt_internet"
   }
 }
 
 
-## Create the SSLO Security Stack Route Table Associations
-resource "aws_route_table_association" "sslo-route-table-management" {
+# Create the Main SSLO Security Stack Route Table association
+#resource "aws_main_route_table_association" "main" {
+#  vpc_id         = aws_vpc.securitystack.id
+#  route_table_id = aws_route_table.internet.id
+#}
+
+## Create the Route Table Associations
+resource "aws_route_table_association" "management" {
   subnet_id      = aws_subnet.management.id
-  route_table_id = aws_route_table.sslo-route-table.id
+  route_table_id = aws_route_table.internet.id
 }
 
-resource "aws_route_table_association" "sslo-route-table-external" {
+resource "aws_route_table_association" "external" {
   subnet_id      = aws_subnet.external.id
-  route_table_id = aws_route_table.sslo-route-table.id
-}
-
-resource "aws_route_table_association" "sslo-route-table-DMZ1" {
-  subnet_id      = aws_subnet.DMZ1.id
-  route_table_id = aws_route_table.sslo-route-table.id
-}
-
-resource "aws_route_table_association" "sslo-route-table-DMZ2" {
-  subnet_id      = aws_subnet.DMZ2.id
-  route_table_id = aws_route_table.sslo-route-table.id
-}
-
-resource "aws_route_table_association" "sslo-route-table-DMZ3" {
-  subnet_id      = aws_subnet.DMZ3.id
-  route_table_id = aws_route_table.sslo-route-table.id
-}
-
-resource "aws_route_table_association" "sslo-route-table-DMZ4" {
-  subnet_id      = aws_subnet.DMZ4.id
-  route_table_id = aws_route_table.sslo-route-table.id
+  route_table_id = aws_route_table.internet.id
 }
 
 
-## Create the Internal Subnet Association with Separate Route Table
-resource "aws_route_table_association" "sslo-internal-subnet-route-table" {
-  subnet_id      = aws_subnet.internal.id
-  route_table_id = aws_route_table.sslo-internal-subnet-route-table.id
-}
-
-
-## Create the Main SSLO Security Stack Route Table asscociation
-resource "aws_main_route_table_association" "sslo-main-route-table-association" {
-  vpc_id         = module.vpc.vpc_id
-  route_table_id = aws_route_table.sslo-route-table.id
-}
-
-
-## Create the IGW
-resource "aws_internet_gateway" "sslo_igw" {
-  vpc_id = module.vpc.vpc_id
-  tags = {
-    Name = "${var.prefix}-sslo-igw"
-  }
-}
-
-
-## Create the SSLO TGW App Stack Route Table
-resource "aws_route_table" "sslo-appstack-route-table" {
-  vpc_id = aws_vpc.appstack.id
-  route {
-    cidr_block         = var.vpc_cidrs["vpc"]
-    transit_gateway_id = aws_ec2_transit_gateway.sslo-tgw.id
-  }
-  route {
-    cidr_block         = "0.0.0.0/0"
-    transit_gateway_id = aws_ec2_transit_gateway.sslo-tgw.id
-  }
-  tags = {
-    Name = "${var.prefix}-sslo-appstack-route-table"
-  }
-}
-
-
-## Create the Main SSLO TGW App Stack Route Table asscociation
-resource "aws_main_route_table_association" "sslo-main-appstack-route-table-association" {
-  vpc_id         = aws_vpc.appstack.id
-  route_table_id = aws_route_table.sslo-appstack-route-table.id
-}
-
-
-## Create the SSLO TGW App Stack Route Table Associations
-resource "aws_route_table_association" "sslo-appstack-route-table" {
-  subnet_id      = aws_subnet.tgw-appstack.id
-  route_table_id = aws_route_table.sslo-appstack-route-table.id
-}
-
-
-## Create the Internal BIG-IP Subnet Route Table
-resource "aws_route_table" "sslo-internal-subnet-route-table" {
-  vpc_id = module.vpc.vpc_id
+## Create the Route Table for 'dmz1' subnet
+resource "aws_route_table" "dmz1" {
+  vpc_id = aws_vpc.securitystack.id
   route {
     cidr_block           = "0.0.0.0/0"
-    network_interface_id = aws_network_interface.sslo_bigip_internal.id
+    network_interface_id = aws_network_interface.bigip_dmz1.id
+  }
+  route {
+    cidr_block           = var.vpc_cidrs["external"]
+    network_interface_id = aws_network_interface.inspection_device_1_dmz1.id
+  }
+  tags = {
+    Name = "${var.prefix}-rt_inspection_device_1_dmz1"
+  }
+}
+
+## Create the Route Table Association
+resource "aws_route_table_association" "dmz1" {
+  subnet_id      = aws_subnet.dmz1.id
+  route_table_id = aws_route_table.dmz1.id
+}
+
+
+## Create the Route Table for 'dmz2' subnet
+resource "aws_route_table" "dmz2" {
+  vpc_id = aws_vpc.securitystack.id
+  route {
+    cidr_block           = "0.0.0.0/0"
+    network_interface_id = aws_network_interface.inspection_device_1_dmz2.id
+  }
+  route {
+    cidr_block           = var.vpc_cidrs["external"]
+    network_interface_id = aws_network_interface.bigip_dmz2.id
+  }
+  tags = {
+    Name = "${var.prefix}-rt_inspection_device_1_dmz2"
+  }
+}
+
+## Create the Route Table Association
+resource "aws_route_table_association" "dmz2" {
+  subnet_id      = aws_subnet.dmz2.id
+  route_table_id = aws_route_table.dmz2.id
+}
+
+
+## Create the Route Table for 'dmz3' subnet
+resource "aws_route_table" "dmz3" {
+  vpc_id = aws_vpc.securitystack.id
+  route {
+    cidr_block           = "0.0.0.0/0"
+    network_interface_id = aws_network_interface.bigip_dmz3.id
+  }
+  route {
+    cidr_block           = var.vpc_cidrs["external"]
+    network_interface_id = aws_network_interface.inspection_device_2_dmz3.id
+  }
+  tags = {
+    Name = "${var.prefix}-rt_inspection_device_2_dmz3"
+  }
+}
+
+## Create the Route Table Association
+resource "aws_route_table_association" "dmz3" {
+  subnet_id      = aws_subnet.dmz3.id
+  route_table_id = aws_route_table.dmz3.id
+}
+
+
+## Create the Route Table for 'dmz4' subnet
+resource "aws_route_table" "dmz4" {
+  vpc_id = aws_vpc.securitystack.id
+  route {
+    cidr_block           = "0.0.0.0/0"
+    network_interface_id = aws_network_interface.inspection_device_2_dmz4.id
+  }
+  route {
+    cidr_block           = var.vpc_cidrs["external"]
+    network_interface_id = aws_network_interface.bigip_dmz4.id
+  }
+  tags = {
+    Name = "${var.prefix}-rt_inspection_device_2_dmz4"
+  }
+}
+
+## Create the Route Table Association
+resource "aws_route_table_association" "dmz4" {
+  subnet_id      = aws_subnet.dmz4.id
+  route_table_id = aws_route_table.dmz4.id
+}
+
+
+## Create the Route Table for 'internal' subnet
+resource "aws_route_table" "internal" {
+  vpc_id = aws_vpc.securitystack.id
+  route {
+    cidr_block           = "0.0.0.0/0"
+    network_interface_id = aws_network_interface.bigip_internal.id
   }
   route {
     cidr_block         = var.vpc_cidrs["application"]
-    transit_gateway_id = aws_ec2_transit_gateway.sslo-tgw.id
+    transit_gateway_id = aws_ec2_transit_gateway.sslo.id
   }
   tags = {
-    Name = "${var.prefix}-sslo-internal-subnet-route-table"
+    Name = "${var.prefix}-rt_internal"
   }
+}
+
+## Create the Route Table Association
+resource "aws_route_table_association" "internal" {
+  subnet_id      = aws_subnet.internal.id
+  route_table_id = aws_route_table.internal.id
+}
+
+
+## Create the Route Table for 'application' subnet
+resource "aws_route_table" "application" {
+  vpc_id = aws_vpc.appstack.id
+  route {
+    cidr_block         = "0.0.0.0/0"
+    transit_gateway_id = aws_ec2_transit_gateway.sslo.id
+  }
+  tags = {
+    Name = "${var.prefix}-rt_application"
+  }
+}
+
+# Create the Main Route Table Association
+#resource "aws_main_route_table_association" "application" {
+#  vpc_id         = aws_vpc.appstack.id
+#  route_table_id = aws_route_table.application.id
+#}
+
+## Create the Route Table Association for 'application' subnet
+resource "aws_route_table_association" "application" {
+  subnet_id      = aws_subnet.application.id
+  route_table_id = aws_route_table.application.id
 }
