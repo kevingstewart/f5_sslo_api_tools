@@ -178,6 +178,8 @@ bash /var/config/rest/downloads/f5-bigip-runtime-init.gz.run -- '--cloud aws'
 f5-bigip-runtime-init --config-file /config/cloud/runtime-init-conf.yaml
 
 # Activate the built-in SSL Orchestrator package - filename is dependent on BIG-IP version that you are deploying
-curl -sku 'admin:${admin_password}' -H 'Content-Type: application/json' -X POST "https://localhost/mgmt/shared/iapp/package-management-tasks" -d '{"operation":"INSTALL", "packageFilePath":"/var/config/rest/downloads/${sslo_pkg_name}"}'
+restcurl -X POST /shared/iapp/stage-package-install -d '{"packagePath":"/usr/share/packages/f5-iappslx-ssl-orchestrator/${sslo_pkg_name}"}'
+sleep 5
+restcurl -X POST /shared/iapp/package-management-tasks -d '{"operation":"INSTALL","packageFilePath":"/var/config/rest/downloads/${sslo_pkg_name}"}'
 
 echo "$(date +"%Y-%m-%dT%H:%M:%S.%3NZ") : Startup Script Finish"
