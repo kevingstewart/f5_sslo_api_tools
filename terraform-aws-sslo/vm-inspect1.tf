@@ -46,7 +46,7 @@ resource "aws_instance" "inspection_device_1" {
                       #!/bin/bash
                       sudo ip route delete default
                       sudo ip route add default via ${cidrhost(var.vpc_cidrs["dmz1"], 1)} metric 1
-                      sudo ip route add ${var.vpc_cidrs["internal"]} via ${cidrhost(var.vpc_cidrs["dmz2"], 1)}
+                      sudo ip route add ${var.vpc_cidrs["external"]} via ${cidrhost(var.vpc_cidrs["dmz2"], 1)}
                       sudo sysctl -w net.ipv4.ip_forward=1
                       EOF
 
