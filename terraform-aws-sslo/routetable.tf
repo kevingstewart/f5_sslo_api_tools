@@ -22,10 +22,10 @@ resource "aws_route_table" "internet" {
 
 
 # Create the Main SSLO Security Stack Route Table association
-resource "aws_main_route_table_association" "main" {
-  vpc_id         = aws_vpc.securitystack.id
-  route_table_id = aws_route_table.internet.id
-}
+#resource "aws_main_route_table_association" "main" {
+#  vpc_id         = aws_vpc.securitystack.id
+#  route_table_id = aws_route_table.internet.id
+#}
 
 ## Create the Route Table Associations
 resource "aws_route_table_association" "management" {
@@ -47,7 +47,7 @@ resource "aws_route_table" "dmz1" {
     network_interface_id = aws_network_interface.bigip_dmz1.id
   }
   route {
-    cidr_block           = var.vpc_cidrs["application"]
+    cidr_block           = var.vpc_cidrs["external"]
     network_interface_id = aws_network_interface.inspection_device_1_dmz1.id
   }
   tags = {
@@ -70,7 +70,7 @@ resource "aws_route_table" "dmz2" {
     network_interface_id = aws_network_interface.inspection_device_1_dmz2.id
   }
   route {
-    cidr_block           = var.vpc_cidrs["application"]
+    cidr_block           = var.vpc_cidrs["external"]
     network_interface_id = aws_network_interface.bigip_dmz2.id
   }
   tags = {
@@ -93,7 +93,7 @@ resource "aws_route_table" "dmz3" {
     network_interface_id = aws_network_interface.bigip_dmz3.id
   }
   route {
-    cidr_block           = var.vpc_cidrs["application"]
+    cidr_block           = var.vpc_cidrs["external"]
     network_interface_id = aws_network_interface.inspection_device_2_dmz3.id
   }
   tags = {
@@ -116,7 +116,7 @@ resource "aws_route_table" "dmz4" {
     network_interface_id = aws_network_interface.inspection_device_2_dmz4.id
   }
   route {
-    cidr_block           = var.vpc_cidrs["application"]
+    cidr_block           = var.vpc_cidrs["external"]
     network_interface_id = aws_network_interface.bigip_dmz4.id
   }
   tags = {
@@ -134,10 +134,10 @@ resource "aws_route_table_association" "dmz4" {
 ## Create the Route Table for 'internal' subnet
 resource "aws_route_table" "internal" {
   vpc_id = aws_vpc.securitystack.id
-  #route {
-  #  cidr_block           = "0.0.0.0/0"
-  #  network_interface_id = aws_network_interface.bigip_internal.id
-  #}
+  route {
+    cidr_block           = "0.0.0.0/0"
+    network_interface_id = aws_network_interface.bigip_internal.id
+  }
   route {
     cidr_block         = var.vpc_cidrs["application"]
     transit_gateway_id = aws_ec2_transit_gateway.sslo.id
@@ -157,10 +157,6 @@ resource "aws_route_table_association" "internal" {
 ## Create the Route Table for 'application' subnet
 resource "aws_route_table" "application" {
   vpc_id = aws_vpc.appstack.id
-  #route {
-  #  cidr_block         = var.vpc_cidrs["vpc"]
-  #  transit_gateway_id = aws_ec2_transit_gateway.sslo.id
-  #}
   route {
     cidr_block         = "0.0.0.0/0"
     transit_gateway_id = aws_ec2_transit_gateway.sslo.id
@@ -171,10 +167,10 @@ resource "aws_route_table" "application" {
 }
 
 # Create the Main Route Table Association
-resource "aws_main_route_table_association" "application" {
-  vpc_id         = aws_vpc.appstack.id
-  route_table_id = aws_route_table.application.id
-}
+#resource "aws_main_route_table_association" "application" {
+#  vpc_id         = aws_vpc.appstack.id
+#  route_table_id = aws_route_table.application.id
+#}
 
 ## Create the Route Table Association for 'application' subnet
 resource "aws_route_table_association" "application" {
