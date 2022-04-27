@@ -18,7 +18,7 @@ resource "aws_network_interface" "jumpbox_mgmt" {
   source_dest_check = "false"
   security_groups   = [aws_security_group.management.id]
   tags = {
-    Name = "${var.prefix}-eni_jumpbox_mgmtmgmt"
+    Name = "${var.prefix}-eni_jumpbox_mgmt"
   }
 }
 

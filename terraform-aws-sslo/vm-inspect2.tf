@@ -43,11 +43,11 @@ resource "aws_instance" "inspection_device_2" {
   key_name          = aws_key_pair.my_keypair.key_name
   availability_zone = var.az
   user_data         = <<-EOF
-                      #!/bin/bash
-                      sudo ip route delete default
-                      sudo ip route add default via ${cidrhost(var.vpc_cidrs["dmz3"], 1)} metric 1
-                      sudo ip route add ${var.vpc_cidrs["external"]} via ${cidrhost(var.vpc_cidrs["dmz4"], 1)}
-                      sudo sysctl -w net.ipv4.ip_forward=1
+                      #!/usr/bin/bash
+                      ip route delete default
+                      ip route add default via ${cidrhost(var.vpc_cidrs["dmz3"], 1)} metric 1
+                      ip route add ${var.vpc_cidrs["external"]} via ${cidrhost(var.vpc_cidrs["dmz4"], 1)}
+                      sysctl -w net.ipv4.ip_forward=1
                       EOF
 
   tags = {
