@@ -3,7 +3,8 @@ echo ""
 echo "This will deploy an SSL Orchestrator Inbound Layer 3 Topology"
 echo "using the variables file created by the accompanying Terraform."
 echo ""
-echo "Note: You must copy the ansible_vars.yaml file here first."
+echo "Copying the ansible_vars.yaml file created by Terraform..."
+cp ../terraform-aws-sslo/ansible_vars.yaml .
 echo ""
 echo "ansible_vars.yaml"
 echo "========================================================================"
@@ -15,7 +16,6 @@ read -r -p "Are you sure? [y/N] " response
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-    cp ../terraform-aws-sslo/ansible_vars.yaml .
     ansible-playbook -e @ansible_vars.yaml playbooks/inbound-l3-complete.yaml
 else
     echo "Cancelled"
