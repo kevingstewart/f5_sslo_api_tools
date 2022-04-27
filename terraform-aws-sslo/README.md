@@ -13,7 +13,7 @@ The resulting deployment will consist of the following:
 The Terraform does not automatically deploy an SSL Orchestrator Topology configuration. However, it does generate an Ansible Variables file that can be used with the accompanying Ansible playbook to deploy an Inbound Layer 3 Topology. You can also manually configure and deploy the Topology instead.
 
 
-## Project Development ##
+## Project Development
 
 This template was developed and tested in the **AWS US-East-1** region with the following versions:
 
@@ -21,7 +21,7 @@ This template was developed and tested in the **AWS US-East-1** region with the 
 - Terraform v0.14.5 / AWS Provider v3.57.0
 
 
-## Usage ##
+## Usage
 
 - From a web browser client - subscribe to the following EC2 instances:
 
@@ -60,7 +60,7 @@ This template was developed and tested in the **AWS US-East-1** region with the 
 - If there are no errors, Terraform  will output several values, including the public IP address to access the SSL Orchestrator TMUI/API.
 
 
-## Deleting the Deployment ##
+## Deleting the Deployment
 
 When you are ready to delete your deployment
   ```
@@ -68,7 +68,7 @@ When you are ready to delete your deployment
   ```
 
 
-## Steps for Manual SSL Orchestrator Topology Configuration ##
+## Steps for Manual SSL Orchestrator Topology Configuration
 
 **TODO: review and correct configuration object field name references**
 
@@ -96,39 +96,69 @@ When you are ready to delete your deployment
   - Use **dmz4** as the From-Service VLAN
   - Enable Port remapping (e.g., 9000)
 
-- Create a Service Chain and add the first inspection service to it.
+- Create a Service Chain (service_chain_1) and add the first inspection service to it.
 
-- Create a second Service Chain and add both inspection services to it.
+- Create a second Service Chain (service_chain_2) and add both inspection services to it.
 
-- In the Egress settings, use automap and network default route
+- In the Egress settings, use SNAT automap and network default route
 
-- In the Security Policy rules, add the first Service Chain to the Default rule.
+- In the Security Policy rules:
 
-- Create a new rule with **FILL IN THE BLANK** condition and apply the second Service Chain to it.
+  - Create a new rule (before the default rule) withClient Subnet: 10.0.0.0/8 and Service Chain: service_chain_1
+
+  - Add the second Service Chain to the Default rule.
 
 - Deploy the Topology configuration.
 
 
-**Inbound Traffic Diagram**
-*needs to be updated*
+### Inbound Traffic Diagram
+
+**needs to be updated**
 
  ![f5](https://user-images.githubusercontent.com/18743780/134435723-a9216d8a-0cd7-463a-bda7-665eaaff9008.png)
 
+<br>
 
-<hr>
+## Troubleshooting
 
-**Misc notes - to be cleaned up later**
+### BIG-IP (SSL Orchestrator) VE Issues
 
-- SSLO has ATC packages installed and DO provisions SSLO and sets networking up via runtime-init in the f5_onboard.tmpl
+The BIG-IP VE uses the F5 Automation Toochain Declarative Onboarding (DO) extension to configure the base networking. This is intiated via the runtime-init script as defined in the f5_onboard.tmpl template file.
 
-- This demo uses "Inspection" devices sitting in separate service chains to simulate real world deployments. These are a Linux hosts with Snort installed. Snort is not configured but it will bootstrap with appropriate routing and IP forwarding so that packets traverse the inspection zone and re-enter the dmz2/dmz4 interfaces.
+If the DO configuration fails (possibly due to a licensing issue), the BIG-IP network settings will not be configured. Correct your DO issues and redeploy the BIG-IP.
 
-- If the config fails, you should check where traffic is stopping.  A good place to start is at the F5. Do a tcpdump on the dmz1 and dmz3 interface...do you see traffic? yes then tcpdump the dmz2/dmz4 interface....traffic? no....then its probably the Inspection devices and it didnt bootstrap properly.
 
-- SSH into the devices and check the route table, does it have a route to 10.0.2.0/24 via 10.0.4.23/10.0.7.23?
+### Inspection Devices
 
-- Run these commands to fix the routing issue, change the IP on the dmz3/4 device to 10.0.7.23:
-  ```
-  sudo ip route add 10.0.2.0/24 via 10.0.4.23 dev eth2
-  sudo sysctl -w net.ipv4.ip_forward=1
-  ```
+This configuration uses "inspection" devices sitting in separate service chains to simulate real world deployments. These are Linux hosts with Snort IDS installed. Snort is not configured, but it will bootstrap with appropriate routing and IP forwarding so that packets traverse the inspection zone and return to the SSL Orchestrator interfaces.
+
+If the config fails, you should check where traffic is stopping.  A good place to start is at the BIG-IP.
+
+- Run a tcpdump on the dmz1 and dmz3 interfaces. Do you see traffic?
+  - No: Inspection devices are not configured properly in the SSL Orchestrator Service configuration, Service Chain, or Security Policy. Review your SSL Orchestrator configuration.
+
+  - Yes: Run a tcpdump on the dmz2/dmz4 interface. Do you see traffic?
+
+    - No: The routes on the inspection devices are not set up correctly (possibly due to bootstrap issues).
+
+      - SSH to the inspection device(s) and check the route table.
+
+      - Does the table contain a route for 10.0.2.0/24? If not, then run the following commands to add the routes:
+
+        - inspection_device_1: 
+
+          ```
+          sudo ip route delete default
+          sudo ip route add default via 10.0.3.1 metric 1
+          sudo ip route add 10.0.2.0/24 via 10.0.3.129
+          sudo sysctl -w net.ipv4.ip_forward=1
+          ```
+
+        - inspection_device_2:
+
+          ```
+          sudo ip route delete default
+          sudo ip route add default via 10.0.4.1 metric 1
+          sudo ip route add 10.0.2.0/24 via 10.0.4.129
+          sudo sysctl -w net.ipv4.ip_forward=1
+          ```
