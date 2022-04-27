@@ -152,5 +152,7 @@
         provider: "{{ provider }}"
         name: "sslo_{{topology_name}}.app/sslo_{{topology_name}}"
         pool: "/Common/webapp"
+        address_translation: "yes"
+        port_translation: "yes"
       delegate_to: localhost
 
