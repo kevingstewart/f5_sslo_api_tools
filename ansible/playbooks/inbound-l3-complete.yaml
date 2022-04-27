@@ -20,6 +20,7 @@
     snort1_host: "{{snort1_host}}"
     snort2_host: "{{snort2_host}}"
     webapp_pool: "{{webapp_pool}}"
+    topology_name: "l3inboundapp"
 
     provider:
       server: "{{ ansible_host }}"
@@ -34,6 +35,8 @@
       bigip_pool:
         provider: "{{ provider }}"
         name: webapp
+        monitors:
+        - https
       delegate_to: localhost
 
     - name: Add member to webapp pool
@@ -131,7 +134,7 @@
     ## Topology
     - name: Create SSLO Topology
       bigip_sslo_config_topology:
-        name: "l3inboundapp"
+        name: "{{topology_name}}"
         topology_type: "inbound_l3"
         dest: "10.0.2.200/32"
         port: 443
@@ -141,4 +144,13 @@
         - "/Common/external"
         snat: "automap"
         pool: "/Common/webapp"
+
+
+    ## Workaround :: manually add pool to topology VIP
+    - name: Add pool to topology VIP
+      bigip_virtual_server:
+        provider: "{{ provider }}"
+        name: "sslo_{{topology_name}}.app/sslo_{{topology_name}}"
+        pool: "/Common/webapp"
+      delegate_to: localhost
 
