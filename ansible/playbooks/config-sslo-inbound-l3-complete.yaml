@@ -1,6 +1,6 @@
 ---
 
-- name: Create SSLO SSL Configuration
+- name: Create SSLO Topology Configuration
   hosts: all
   gather_facts: False
 
@@ -130,7 +130,6 @@
             condition_option_ports:
             - "443"
 
-
     ## Topology
     - name: Create SSLO Topology
       bigip_sslo_config_topology:
@@ -144,7 +143,6 @@
         - "/Common/external"
         snat: "automap"
         pool: "/Common/webapp"
-
 
     ## Workaround :: manually add pool to topology VIP
     - name: Add pool to topology VIP
