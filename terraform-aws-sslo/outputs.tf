@@ -62,13 +62,3 @@ output "inspection_service_ip_2" {
   value       = aws_network_interface.inspection_device_2_dmz3.private_ip
   description = "Private IP of the Inspection Service Two IP"
 }
-
-#output "jumpbox_public_ip" {
-#  value       = aws_instance.jumpbox.public_ip
-#  description = "The public IP of the jumpbox."
-#}
-
-#output "jumpbox_public_dns" {
-#  value       = aws_instance.jumpbox.public_dns
-#  description = "The public DNS of the jumpbox."
-#}

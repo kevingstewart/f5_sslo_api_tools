@@ -77,9 +77,3 @@ variable "webapp_ami" {
   type        = string
   default     = "ami-05343502b4149e010"
 }
-
-variable "jumpbox_ami" {
-  description = "Jumphost AMI - Default: Windows Server 2019 Base (us-east-1)"
-  type        = string
-  default     = "ami-0aad84f764a2bd39a"
-}
