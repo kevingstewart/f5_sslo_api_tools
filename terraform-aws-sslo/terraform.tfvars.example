@@ -5,13 +5,20 @@
 ### The new terraform.tfvars file will be ignored in git commits.            ###
 ################################################################################
 
-# Custom Variable Values
+## Custom Variable Values
 
 # Prefix for object creation
-prefix = "jc"
+prefix = "sslo"
 
 # Name for AWS EC2 key
 ec2_key_name = "sslo-keypair"
+
+# BYOL License Key required for SSL Orchestrator
+# license_key = "AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE"
+
+# Source list for management security group
+# !!! Add your own source IP and bitmask here to restrict access!!!
+mgmt_src_addr_prefixes = ["0.0.0.0/0"]
 
 # AWS location
 region = "us-east-1"
@@ -45,13 +52,6 @@ sslo_ami       = "ami-06ceb79f3482bd83c" ### us-east-1 ### F5 BIG-IP VE - ALL (B
 
 sslo_pkg_name = "f5-iappslx-ssl-orchestrator-15.1.0-7.5.2.noarch.rpm" ### BIG-IP 15.1 (SSLO 7.5)
 #sslo_pkg_name = "f5-iappslx-ssl-orchestrator-16.1.0-9.0.24.noarch.rpm"   ### BIG-IP 16.1 (SSLO 9.0)
-
-# BYOL License Key required for SSL Orchestrator
-# license_key = "AAAAA-BBBBB-CCCCC-DDDDD-EEEEEEE"
-
-# Source list for management security group
-# !!! Add your own source IP and bitmask here to restrict access!!!
-mgmt_src_addr_prefixes = ["0.0.0.0/0"]
 
 # 'admin' user password for BIG-IP
 admin_password = "f5Twister!"
