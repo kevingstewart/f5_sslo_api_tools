@@ -1,6 +1,9 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Local Ansible collection directories
+**/collection/*
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
