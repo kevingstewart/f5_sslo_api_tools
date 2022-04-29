@@ -16,7 +16,7 @@ read -r -p "Are you sure? [y/N] " response
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-    ansible-playbook -e @ansible_vars.yaml playbooks/inbound-l3-complete.yaml
+    ansible-playbook -e @ansible_vars.yaml playbooks/config-sslo-inbound-l3-complete.yaml
 else
     echo "Cancelled"
 fi
