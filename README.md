@@ -17,7 +17,6 @@ The following software package versions are required for F5 Ansible automation:
 
 Please refer to official F5 documentation for additional guidance: https://clouddocs.f5.com/products/orchestration/ansible/devel/
 
-<br />
 
 ##### Installation
 - Start in an empty local folder and git clone this repository
