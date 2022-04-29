@@ -33,8 +33,6 @@ Please refer to official F5 documentation for additional guidance: https://cloud
 - Launch Terraform commands from within the **f5_sslo_api_tools/terraform-aws-sslo** folder.
 - Launch Ansible commands from within the **f5_sslo_api_tools/ansible** folder.
 
-<br />
-
 ##### Required Python Libraries
 The SSL Orchestrator Ansible modules depend on the following third party libraries:
 - f5-sdk
@@ -86,9 +84,6 @@ An additional option is provided here to employ a pre-packaged automation enviro
   docker container start f5sslo
   docker container attach f5sslo
   ```
-
-
-<br />
 
 - **code-server**: this container includes an implementation of Visual Studio Code Server that will expose vscode inside a browser window. Launch this container in an empty folder. It will create a "code" folder inside this folder and mount to a /code folder in the container.
   ```bash
