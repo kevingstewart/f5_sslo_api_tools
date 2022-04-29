@@ -120,3 +120,14 @@ While the capture is running, perform the curl request again from another local 
 ```bash
 tcpdump -lnni dmz1 -Xs0 not icmp
 ```
+
+---------------
+
+##### Attributions
+This project would not exist without the contributions of the following individuals:
+- Jason Chiu
+- Melisa Wentz
+- Arnulfo Hernandez
+- Barrymore Simon
+- Matt Stovall
+- Jack Fenimore
