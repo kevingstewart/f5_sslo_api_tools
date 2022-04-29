@@ -1,44 +1,50 @@
-# SSL Orchestrator Topology Configuration using Ansible
+## SSL Orchestrator Topology Configuration using Ansible
 
-This Ansible playbook will deploy an F5 SSL Orchestrator Inbound Layer 3 Topology.
+This project contains a set of sample playbooks to configure SSL Orchestrator:
 
-The resulting Topology deployment will consist of the following:
+- Inbound layer 3 topology
+  - An inbound layer 3 topology
+  - 2 layer 3 security devices (Snort)
+  - 2 service chains
+    - Service chain 1: snort1
+    - Service chain 2: snort1 and snort2
+  - 2 security policy rules
+    - Internal traffic from 10.0.0.0/8 subnet sends to service chain 1
+    - All other TCP/443 traffic sends to service chain 2
 
-- Inbound Layer 3 Topology
-- 2 Layer 3 inspection devices (usually different types of L3 devices - this example uses the same type for demonstration purposes)
-- 2 Service Chains
-  - Service Chain 1 - Inspection device 1
-  - Service Chain 2 - Inspection device 1, Inspection device 2
-- 2 Security Policy rules
-  - Internal traffic sourced from 10.0.0.0/8 subnets -> Service Chain 1
-  - All other TLS traffic on TCP/443 -> Service Chain 2
+- Inbound existing application topology
+  - A simple LTM application (VIP, client/server ssl, pool)
+  - SSL Orchestrator existing app (services, service chains, policy) that attaches itself to the application VIP
 
+- Configuration utility to delete all SSL Orchestrator configuration objects
+- Configuration utility to revoke the BIG-IP license (so that it can be re-used)
 
-The accompanying Terraform files generate an Ansible variables file (ansible_vars.yaml) that can be used with this playbook. 
+------
 
-
-## Project Development ##
+#### Project Development
 
 This template was developed and tested with the following versions:
 
 - SSL Ochestrator 7.5 / BIG-IP 15.1.1
 
+------
 
-## Usage ##
+#### Usage
 
-Before using SSL Orchestrator Ansible playbooks, you must install the F5 Module v2 Ansible collection:
+The accompanying Terraform files generate an Ansible variables file (ansible_vars.yaml) that can be used with this playbook. Before using SSL Orchestrator Ansible playbooks, you must install the F5 Module v2 Ansible collection into your Ansible development folder:
 
   ```
+  cd ansible
   ansible-galaxy collection install f5networks.f5_bigip -f
   ```
 
-Now, you can use either of the following options to deploy the example SSL Orchestrator Topology.
+You can now use one of the following options to deploy the example SSL Orchestrator playbooks
 
 - Option 1: Deploy an Ansible config using the variables file that was created by the accompanying Terraform.
 
   From the 'ansible' folder:
 
-  ```
+  ```bash
   cp ../terraform-aws-sslo/ansible_vars.yaml .
   ansible-playbook -e @ansible_vars.yaml playbooks/config-sslo-inbound-l3-complete.yaml
   ```
@@ -49,7 +55,7 @@ Now, you can use either of the following options to deploy the example SSL Orche
 
   From the 'ansible' folder:
 
-   ```
+  ```bash
   cp playbooks/ansible_vars.yaml.example ansible_vars.yaml
   vi ansible_vars.yaml
   ansible-playbook -e @ansible_vars.yaml playbooks/config-sslo-inbound-l3-complete.yaml

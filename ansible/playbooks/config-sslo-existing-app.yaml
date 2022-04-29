@@ -1,4 +1,9 @@
 ---
+#
+# The f5_modules collection is not installed by default in this lab environment.
+# Before using this playbook, install the collection:
+#   ansible-galaxy collection install f5networks.f5_modules -f
+#
 
 ## Existing Application use case :: step 1
 ## This declaration creates an SSLO existing app configuration - consisting of services, service chain, and security policy.

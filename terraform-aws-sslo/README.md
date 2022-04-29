@@ -1,4 +1,4 @@
-# AWS SSL Orchestrator Infrastructure Deployment using Terraform
+## AWS SSL Orchestrator Infrastructure Deployment using Terraform
 
 These Terraform configuration files will deploy an F5 SSL Orchestrator environment into Amazon Web Services (AWS).
 
@@ -12,16 +12,18 @@ The resulting deployment will consist of the following:
 
 The Terraform does not automatically deploy an SSL Orchestrator Topology configuration. However, it does generate an Ansible Variables file that can be used with the accompanying Ansible playbook to deploy an Inbound Layer 3 Topology. You can also manually configure and deploy the Topology instead.
 
+-----
 
-## Project Development
+#### Project Development
 
 This template was developed and tested in the **AWS US-East-1** region with the following versions:
 
 - Terraform v1.1.8 / AWS Provider v3.75.1
 - Terraform v0.14.5 / AWS Provider v3.57.0
 
+-----
 
-## Usage
+#### Usage
 
 - From a web browser client - subscribe to the following EC2 instances:
 
@@ -33,44 +35,44 @@ This template was developed and tested in the **AWS US-East-1** region with the 
 - Obtain your programmatic access credentials for your AWS account: Access Key ID, Access Key, and Session Token.
 
 - From inside your development environment - add a profile to you AWS credentials files or export the AWS credentials
-  ```
-  export AWS_ACCESS_KEY_ID="foo"
-  export AWS_SECRET_ACCESS_KEY="foo"
-  export AWS_SESSION_TOKEN="foo"
+  ```bash
+  export AWS_ACCESS_KEY_ID="your-aws-access-key-id"
+  export AWS_SECRET_ACCESS_KEY="your-aws-secret-access-key"
+  export AWS_SESSION_TOKEN="your-aws-session-token"
   ```
 
-- From the terraform-aws-sslo folder - Copy the included **terraform.tfvars.example** file to **terraform.tfvars** and update the values (they will override the defaults from the *variables.tf* file):
+- From the terraform-aws-sslo folder - Copy the included **terraform.tfvars.example** file to **terraform.tfvars** and update the values (*they will override the defaults from the *variables.tf* file*):
 
   - Set a unique prefix value for object creation
   - Set a BIG-IP license key. You will need a BYOL SSL Orchestrator base registration key.
   - Set a unique name for the EC2 keypair. Terraform will create the keypair in AWS and also save it to the current folder.
   - Set the AWS region and availability (if different)
-  - Set the AMI ID for SSL Orchestrator (**sslo_ami**) if you wish to use a different software version
+  - Set the AMI ID for SSL Orchestrator (**sslo_ami**) if you wish to use a different software version.
   - Set the SSL Orchestrator instance type (if different). Ensure that you use an instance type that supports the 7 ENIs required for this deployment. This will usually be some variant of a **4xlarge** instance type.
   - Set your SSL Orchestrator **admin** user password (use a strong password!). Note: This is configured for demo/dev enviroments only. The recommended practice is to use a secrets manager like Secrets or Vault to store the password.
 
 - From inside your development environment - deploy the Terraform configuration
-  ```
+  ```bash
   terraform init
   terraform validate
   terraform plan
   terraform apply -auto-approve
   ```
 
-- If there are no errors, Terraform  will output several values, including the public IP address to access the SSL Orchestrator TMUI/API.
+- If there are no errors, Terraform  will output several values, including the public IP address to access the SSL Orchestrator TMUI/API. Hang on this information as you'll need it later for testing.
 
+----
 
-## Deleting the Deployment
+#### Deleting the Deployment
 
 When you are ready to delete your deployment
-  ```
+  ```bash
   terraform destroy
   ```
 
+----
 
-## Steps for Manual SSL Orchestrator Topology Configuration
-
-**TODO: review and correct configuration object field name references**
+#### Steps for Manual SSL Orchestrator Topology Configuration
 
 - [optional] Upload a trusted SSL certificate and key before entering the SSL Orchestrator guide configuration UI
 
@@ -110,25 +112,26 @@ When you are ready to delete your deployment
 
 - Deploy the Topology configuration.
 
+----
 
-### Inbound Traffic Diagram
+#### Inbound Traffic Diagram
 
 **needs to be updated**
 
  ![f5](https://user-images.githubusercontent.com/18743780/134435723-a9216d8a-0cd7-463a-bda7-665eaaff9008.png)
 
-<br>
+----
 
-## Troubleshooting
+#### Troubleshooting
 
-### BIG-IP (SSL Orchestrator) VE Issues
+##### BIG-IP (SSL Orchestrator) VE Issues
 
 The BIG-IP VE uses the F5 Automation Toochain Declarative Onboarding (DO) extension to configure the base networking. This is intiated via the runtime-init script as defined in the f5_onboard.tmpl template file.
 
 If the DO configuration fails (possibly due to a licensing issue), the BIG-IP network settings will not be configured. Correct your DO issues and redeploy the BIG-IP.
 
 
-### Inspection Devices
+##### Inspection Devices
 
 This configuration uses "inspection" devices sitting in separate service chains to simulate real world deployments. These are Linux hosts with Snort IDS installed. Snort is not configured, but it will bootstrap with appropriate routing and IP forwarding so that packets traverse the inspection zone and return to the SSL Orchestrator interfaces.
 
@@ -147,7 +150,7 @@ If the config fails, you should check where traffic is stopping.  A good place t
 
         - inspection_device_1: 
 
-          ```
+          ```bash
           sudo ip route delete default
           sudo ip route add default via 10.0.3.1 metric 1
           sudo ip route add 10.0.2.0/24 via 10.0.3.129
@@ -156,7 +159,7 @@ If the config fails, you should check where traffic is stopping.  A good place t
 
         - inspection_device_2:
 
-          ```
+          ```bash
           sudo ip route delete default
           sudo ip route add default via 10.0.4.1 metric 1
           sudo ip route add 10.0.2.0/24 via 10.0.4.129
