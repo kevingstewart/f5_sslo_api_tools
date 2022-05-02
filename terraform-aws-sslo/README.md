@@ -116,8 +116,6 @@ When you are ready to delete your deployment
 
 #### Inbound Traffic Diagram
 
-**needs to be updated**
-
  ![F5](https://user-images.githubusercontent.com/16813250/166265042-6008008a-6e60-4034-b6aa-51924ce485da.png)
 
  ![F5](https://user-images.githubusercontent.com/16813250/166265200-9c753ea5-3a27-4c1c-ba03-0205be2e168a.png)
