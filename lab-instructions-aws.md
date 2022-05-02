@@ -5,7 +5,7 @@ The following will walk you through a simple set of examples using the provided 
 
 ------
 
-####Launch the development container environment
+#### Launch the development container environment
 
 There are two methods for launching the Docker container: 
 
@@ -60,7 +60,7 @@ cd <repo>
 
 ------
 
-####Bootstrap the SSLO AWS environment with Terraform
+#### Bootstrap the SSLO AWS environment with Terraform
 
 - From a web browser client - subscribe to the following EC2 instances:
 
@@ -105,7 +105,7 @@ cd <repo>
 
 ------
 
-####Build the SSL Orchestrator environment with Ansible
+#### Build the SSL Orchestrator environment with Ansible
 
 - Move into the ansible folder and install the F5 collection.
 
