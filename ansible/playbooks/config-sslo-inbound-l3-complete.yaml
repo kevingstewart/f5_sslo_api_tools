@@ -30,7 +30,7 @@
     ## import cert/key
     - name: Import server cert/key
       bigip_ssl_key_cert:
-        key_content: "{{ lookup('file', 'certs/wildcardrsa.f5labs.com.pem') }}"
+        key_content: "{{ lookup('file', 'certs/wildcardrsa.f5labs.com.pemk') }}"
         key_name: wildcard.f5labs.com
         cert_content: "{{ lookup('file', 'certs/wildcardrsa.f5labs.com.crt') }}"
         cert_name: wildcard.f5labs.com
